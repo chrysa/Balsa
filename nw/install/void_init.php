@@ -24,6 +24,9 @@ if($bdd->connect()!==true)
 //reassignation des variable GET
 $get=$_GET;
 
+//reassignation des variable POST
+$post=$_POST;
+
 //recupération des parametre client
 if(!isset($_SESSION['param_client']))
 {
@@ -96,11 +99,10 @@ if(!is_logged())
 }
 
 //definition de la langue
-$langage='fr_FR';
 putenv("LANG=$langage"); // On modifie la variable d'environnement
 setlocale(LC_ALL, $langage); // On modifie les informations de localisation en fonction de la langue	
 $nomDesFichiersDeLangue = 'traduction'; // Le nom de nos fichiers .mo	
-bindtextdomain($nomDesFichiersDeLangue, $path."nw/locale"); // On indique le chemin vers les fichiers .mo
+bindtextdomain($nomDesFichiersDeLangue, $path."locale"); // On indique le chemin vers les fichiers .mo
 textdomain($nomDesFichiersDeLangue); // Le nom du domaine par défaut
 
 

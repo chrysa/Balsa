@@ -1,5 +1,5 @@
 <?php
-global $path,$path_w,$bdd,$base_url;
+global $path,$path_w,$bdd,$base_url,$nom_porojet;
 include_once($path.'admin/plugin/balsa_shell/balsa_shell.php');
 $action=$_GET['action'];
 switch($action)
@@ -11,7 +11,7 @@ switch($action)
 	<head>
 		<link rel="stylesheet" href="<?php echo $base_url; ?>admin.php?ajax_admin=1&module=balsa_shell&action=css" type="text/css" media="all" />
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Mon projet avec Balsa</title>
+    <title><?php echo $nom_projet ?></title>
 	</head>
 	<body>
 		<div class="site" id="site">

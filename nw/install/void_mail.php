@@ -11,10 +11,10 @@ function mail_de_base($adr,$subject,$message,$from='someone@yopmail.com',$reply=
 		$mail->Host       = "";			   	   // SMTP server
 		$mail->SMTPAuth   = true;                 	   // enable SMTP authentication
 		$mail->SMTPSecure = "ssl";                 	   // sets the prefix to the servier
-		$mail->Host       = "smtp.gmail.com";      	   // sets GMAIL as the SMTP server
-		$mail->Port       = 465;                   	   // set the SMTP port for the GMAIL server
-		$mail->Username   = "test@test.fr";  // GMAIL username
-		$mail->Password   = "test";	   // GMAIL password
+		$mail->Host       = "||adresse_serveur||";      	   // sets GMAIL as the SMTP server
+		$mail->Port       = ||port_serveur||;                   	   // set the SMTP port for the GMAIL server
+		$mail->Username   = "||utilisateur||";  // GMAIL username
+		$mail->Password   = "||mdp_mail||";	   // GMAIL password
 		
 		$mail->SetFrom($from, '', 1);
 		
@@ -44,10 +44,10 @@ function mail_plus_piece_jointe($adr,$subject,$message,$pj,$pjn,$from='someone@y
 		$mail->Host       = "";			   	   // SMTP server
 		$mail->SMTPAuth   = true;                 	   // enable SMTP authentication
 		$mail->SMTPSecure = "ssl";                 	   // sets the prefix to the servier
-		$mail->Host       = "smtp.gmail.com";      	   // sets GMAIL as the SMTP server
-		$mail->Port       = 465;                   	   // set the SMTP port for the GMAIL server
-		$mail->Username   = "test@test.fr";  // GMAIL username
-		$mail->Password   = "test";	   // GMAIL password
+		$mail->Host       = "||adresse_serveur||";      	   // sets GMAIL as the SMTP server
+		$mail->Port       = ||port_serveur||;                   	   // set the SMTP port for the GMAIL server
+		$mail->Username   = "||utilisateur||";  // GMAIL username
+		$mail->Password   = "||mdp_mail||";	   // GMAIL password
 		
 		$mail->SetFrom($from, '', 1);
 		

@@ -1,4 +1,26 @@
 
+		<?php
+	class Bdd
+	{
+		private $bdUser;
+		private $bdPassWord;
+		private $bdDataBase;
+		private $bdServer;
+		private $connexion;
+		private $estConnecte;
+
+	
+		function Bdd()
+		{
+			$this->bdUser = "plop";
+			$this->bdPassWord = "azerty";
+			$this->bdDataBase = "Balsa";
+			$this->bdServer = "localhost";
+			$this->estConnecte = false;
+			$this->nbreq=0;
+			$this->reqtime=0;
+		}
+		
 public function creat_db_Balsa($dn_name='Balsa',$crea_db=false)
 	{
 		try
