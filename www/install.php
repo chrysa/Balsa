@@ -317,7 +317,7 @@ function create_js()
     	unlink($path.'fonction/mail.php');
     }
     
-   	$mail_str.=file_get_contents($path.'install/void_mail.php');
+   	$mail_str=file_get_contents($path.'install/void_mail.php');
   	$mail_str=str_replace('||adresse_serveur||', $adresse_serveur, $mail_str);
   	$mail_str=str_replace('||port_serveur||', $port_serveur, $mail_str);
   	$mail_str=str_replace('||utilisateur||', $utilisateur, $mail_str);
