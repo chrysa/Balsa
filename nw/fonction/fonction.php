@@ -557,15 +557,20 @@ function verifier_token($temps, $referer, $nom='')
 }
 
 //vérification de la validité du fichier de cache
-function verif_cache($file,$duree=10){
+function verif_cache($file,$duree=60){
 	global $path;
 	//test de l'age de la page de cache
+	if(is_file($path.'cache/'.$file.'.cache')){
 		if((time()-filemtime($path.'cache/'.$file.'.cache'))>$duree){
+			//si la page est trop vieilles je supprime l'ancienne page
 			unlink($path.'cache/'.$file.'.cache');
 			return false;
 		}else{
 			return true;
 		}
+	}else{
+		return false;
+	}
 }
 
 //mise en cache de la page en cours
