@@ -13,7 +13,7 @@ function mail_de_base($adr,$subject,$message,$from='someone@yopmail.com',$reply=
 		$mail->SMTPSecure = "ssl";                 	   // sets the prefix to the servier
 		$mail->Host       = "smtp.gmail.com";      	   // sets GMAIL as the SMTP server
 		$mail->Port       = 465;                   	   // set the SMTP port for the GMAIL server
-		$mail->Username   = "test@test.fr";  // GMAIL username
+		$mail->Username   = "test@gmail.com";  // GMAIL username
 		$mail->Password   = "test";	   // GMAIL password
 		
 		$mail->SetFrom($from, '', 1);
@@ -46,7 +46,7 @@ function mail_plus_piece_jointe($adr,$subject,$message,$pj,$pjn,$from='someone@y
 		$mail->SMTPSecure = "ssl";                 	   // sets the prefix to the servier
 		$mail->Host       = "smtp.gmail.com";      	   // sets GMAIL as the SMTP server
 		$mail->Port       = 465;                   	   // set the SMTP port for the GMAIL server
-		$mail->Username   = "test@test.fr";  // GMAIL username
+		$mail->Username   = "test@gmail.com";  // GMAIL username
 		$mail->Password   = "test";	   // GMAIL password
 		
 		$mail->SetFrom($from, '', 1);

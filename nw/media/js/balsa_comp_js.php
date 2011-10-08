@@ -309,7 +309,7 @@ var JSI=function()
 
 
 
-
+var base_url="http://127.0.0.1/Balsa/www/"
 function file(url)
 {
 	if (window.XMLHttpRequest)

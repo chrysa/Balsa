@@ -111,10 +111,10 @@ function move_nw($path,$path_w,$admin_name)
 	}
 }
 
-function bdd_create($bdd_user,$bdd_host,$bdd_pass,$bdd_name)
+function bdd_create($bdd_user,$bdd_host,$bdd_pass,$bdd_name,$bdd_use,$bdd_cre)
 {
-#	if($_POST['bdd_']=='1')
-#	{
+	if($bdd_use=='oui')
+	{
 		global $bdd,$path,$path_w;
 		$bdd_class_str=
 		'
@@ -145,17 +145,22 @@ function bdd_create($bdd_user,$bdd_host,$bdd_pass,$bdd_name)
 		{
 			include_once $path.'fonction/fonction.php';
 			inclure_fonction('bdd.class');
-			$bdd=new Bdd;
-			if($bdd->creat_db_Balsa($bdd_name))
-			{
-				return true;
-			}
-			else
-			{
-				$erreur.='<div>creation de la base de donnée</div>';
-				echo $erreur;
-				return false;
-			}
+      if($bdd_cre=='1'){
+			  $bdd=new Bdd;
+			  if($bdd->creat_db_Balsa($bdd_name))
+			  {
+				  return true;
+			  }
+			  else
+			  {
+				  $erreur.='<div>creation de la base de donnée</div>';
+				  echo $erreur;
+				  return false;
+			  }
+      }else{
+        return true;
+      }
+
 		}
 		else
 		{
@@ -163,12 +168,11 @@ function bdd_create($bdd_user,$bdd_host,$bdd_pass,$bdd_name)
 			echo $erreur;
 			return false;
 		}		
-#	}
-#	else
-#	{
-#		return true;
-#	}
-
+	}
+	else
+	{
+		return true;
+  }
 }
 
 function create_admin($login,$mail,$pass,$pass2)
@@ -195,6 +199,9 @@ function create_admin($login,$mail,$pass,$pass2)
 function create_index()
 {
 	global $path,$path_w;
+
+  unlink ($path_w.'/index.php');
+
 	$index_str=
 	'<?php
 
@@ -341,8 +348,10 @@ function install_composant()
 	echo 'Deplacement du dossier nw';
 	if(move_nw($path,$path_w,$_POST['admin_path']))
 	{		
-		echo ' ---> ok<br/>creation de la base de donnée';
-		if(bdd_create($_POST['db_user'],$_POST['db_host'],$_POST['db_pass'],$_POST['db_name']))
+    if($_POST['db_cre']=='1'){
+		  echo ' ---> ok<br/>creation de la base de donnée';
+    }
+		if(bdd_create($_POST['db_user'],$_POST['db_host'],$_POST['db_pass'],$_POST['db_name'],$_POST['db_'],$_POST['db_cre']))
 		{
 			echo ' ---> ok <br/>creation du fichier admin';
 			if(create_admin($_POST['admin_login'],$_POST['admin_mail'],$_POST['admin_pass'],$_POST['admin_pass_c']))
@@ -409,7 +418,7 @@ switch($_GET['action'])
 			</div>
 			<h3>Configuration de la base de donnée admin</h3>
 			<div>
-				<label for="db_">utilisé une base de donnée</label> oui : <input type="radio" id="db_" name="db_" value="oui" /> non : <input type="radio" id="db_" name="db_" value="non" checked />
+				<label for="db_">utilisé une base de donnée</label> oui : <input type="radio" id="db_1" name="db_" value="oui" /> non : <input type="radio" id="db_2" name="db_" value="non" checked="true" />
 			</div>
 			<div>
 				<label for="db_host">Hote de la base de donnée</label><input type="text" value="localhost" id="db_host" name="db_host" />
@@ -427,8 +436,8 @@ switch($_GET['action'])
 			</div>
 			<div>
 				<div>Faut-il créer la base de donnée ? </div>
-				<label for="db_cre1">non</label><input type="radio" value="0" id="db_cre1" name="db_cre" checked="true" />
 				<label for="db_cre2">oui</label><input type="radio" value="1" id="db_cre2" name="db_cre" />
+				<label for="db_cre1">non</label><input type="radio" value="0" id="db_cre1" name="db_cre" checked="true" />
 			</div>
 			<h3>Création du compte admin</h3>
 			<div>
@@ -464,7 +473,7 @@ switch($_GET['action'])
 				</select>
 			</div>
 			<div>
-				<label for="projet_nom">Nom du projet</label><input type="text" id="projet_nom" name="projet_nom" />
+				<label for="projet_nom">Nom du projet </label><input type="text" id="projet_nom" name="projet_nom" />
 			</div>
 			<input type="submit" value="suivant">
 		</form>
@@ -490,7 +499,6 @@ switch($_GET['action'])
 		{
 			echo' ---> ok<br/><a href="'.$base_url.'admin.php">entrez dans la page d\'administration</a>';
 		}
-
 		break;
 }
 ?>
