@@ -1,17 +1,20 @@
+<?php
+global $get,$nom_projet;
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
 		<?php echo inclure_css() ?>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Mon projet avec Balsa</title>
+		<title><?php echo $nom_projet ?></title>
 	</head>
 	<body>
 		<div class="site" id="site">
 			<h1>Bienvenue sur Balsa !</h1>
 			<?php
-			if(isset($_GET['page']))
+			if(isset($get['page']))
 			{
-				inclure_page($_GET['page']);
+				inclure_page($get['page']);
 			}
 			?>
 		</div>

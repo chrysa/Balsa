@@ -25,7 +25,7 @@ function list_ajax_controller()
 			'
 			<div class="page" id="page_'.$d.'">
 				<a href="'.$base_url.'goulot.php?page='.$d.'">'.$d.'</a>
-				<a target="_blank" href="http://127.0.0.1/Balsa/www/admin.php?ajax_admin=1&module=editor&edit=ajax/'.$d2.'">éditer</a>
+				<a target="_blank" href="'.$base_url.'admin.php?ajax_admin=1&module=editor&edit=ajax/'.$d2.'">éditer</a>
 			</div>
 			';
 		}
@@ -59,7 +59,7 @@ function list_page_controller()
 			'
 			<div class="page" id="page_'.$d.'">
 				<a href="'.$base_url.'index.php?page='.$d.'">'.$d.'</a>
-				<a target="_blank" href="http://127.0.0.1/Balsa/www/admin.php?ajax_admin=1&module=editor&edit=page/'.$d2.'">éditer</a>
+				<a target="_blank" href="'.$base_url.'admin.php?ajax_admin=1&module=editor&edit=page/'.$d2.'">éditer</a>
 			</div>
 			';
 		}
@@ -122,7 +122,7 @@ function list_function()
 			$display.=
 			'
 			<div class="page" id="page_'.$d.'">
-				<a target="_blank" href="http://127.0.0.1/Balsa/www/admin.php?ajax_admin=1&module=editor&edit=fonction/'.$d.'">'.$d.'</a>
+				<a target="_blank" href="'.$base_url.'admin.php?ajax_admin=1&module=editor&edit=fonction/'.$d.'">'.$d.'</a>
 			</div>
 			';
 		}
@@ -143,6 +143,7 @@ function list_js()
 	'
 	<div class="file_list" id="js_list">
 	<h2>Liste des fichiers javascript</h2>
+        <a href="'.$base_url.'admin.php?action=regen_js">regénérer le fichier javascript</a><hr/>
 	';
 	$dir=scandir($path.'media/js/');
 	foreach($dir as $d)
@@ -156,7 +157,7 @@ function list_js()
 			$display.=
 			'
 			<div class="js" id="js_'.$d.'">
-				<a href="http://127.0.0.1/Balsa/www/admin.php?ajax_admin=1&module=editor&edit=media/js/'.$d.'" target="_blank">'.$d.'</a>
+				<a href="'.$base_url.'admin.php?ajax_admin=1&module=editor&edit=media/js/'.$d.'" target="_blank">'.$d.'</a>
 			</div>
 			';
 		}
@@ -172,6 +173,7 @@ function list_css()
 	'
 	<div class="file_list" id="css_list">
 	<h2>Liste des fichiers CSS</h2>
+        <a href="'.$base_url.'admin.php?action=regen_css">regénérer le fichier CSS</a><hr/>
 	';
 	$dir=scandir($path.'media/css/');
 	foreach($dir as $d)
@@ -185,7 +187,7 @@ function list_css()
 			$display.=
 			'
 			<div class="css" id="css_'.$d.'">
-				<a href="http://127.0.0.1/Balsa/www/admin.php?ajax_admin=1&module=editor&edit=media/css/'.$d.'" target="_blank">'.$d.'</a>
+				<a href="'.$base_url.'admin.php?ajax_admin=1&module=editor&edit=media/css/'.$d.'" target="_blank">'.$d.'</a>
 			</div>
 			';
 		}

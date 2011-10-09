@@ -6,11 +6,19 @@ CHANGELOG
   - modification
     - debug de la création de base de données (install.php/bdd.class.php)
     - debug des fonctions chrysa_ qui ne pointait pas sur le plugin Helloword au lieu de celui du plugin
+    - récupération du $nom_projet dans
+      - nw/page/index.php
+      - nw/admin/plugin/explorer/index.php
+      - nw/admin/plugin/balsa_shell/balsa_shell.php
+      - nw/admin/plugin/controll_panel/controll_panel.php
+
+  - passage d'une URL en dure a $base_url dans nw/admin/plugin/controll_panel/controll_pannel.php
 
   - ajout
     - rajout du void_mail.php oublié dans le dossier install 
     - rajout d'une redirection pour lancer l'install et suppression de l'index de redirection pendant l'install
     - rajout de la gestion du cache depuis le panel
+    - lien de regénération des fichiers JS et CSS depuis le panel dans nw/admin/plugin/controll_panel/index.php nw/admin/plugin/controll_panel/controll_panel.php
 
   - bug trouvé
     - initialisation de l'éditeur en ligne
