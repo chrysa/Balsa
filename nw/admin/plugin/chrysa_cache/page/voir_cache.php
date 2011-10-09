@@ -1,5 +1,5 @@
 <?php
-	global $post,$get,$path,$base_url,$exclu;
+  global $post,$get,$path,$base_url,$exclu;
 	//test de l'esxistence d'un nom de fichier en paramètre pour une suppression unique
 	if(isset($get['name']) AND !empty($get['name'])){
 		//suppression du fichier cache
@@ -68,7 +68,7 @@
 	  }
   //formulaire de sélection des fichiers a supprimer	
     $content='
-    <form method="POST" action="'.$base_url.'admin.php?module=cache&action=voir_cache">
+    <form method="POST" action="'.$base_url.'ajax_admin=1&module=chrysa_cache&action=voir_cache">
       supprimer les fichiers de cache qui ont plus de : 
       <select name="jour">'.$liste_j.'</select> jours 
       <select name="heure">'.$liste_h.'</select> heures 
