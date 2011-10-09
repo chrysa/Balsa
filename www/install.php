@@ -57,7 +57,11 @@ function rmdir_r_2($dir)
             unlink($file);
         }
     }
-    rmdir($dir);
+    if(rmdir($dir)){
+      return true;
+    }else{
+      return false;
+    }
 }
 
 function move_nw($path,$path_w,$admin_name)
@@ -87,8 +91,12 @@ function move_nw($path,$path_w,$admin_name)
 				return false;
 			}
 
-
 		}
+
+    if(is_file($path_w.'admin.php')){
+	    unlink($path_w.'admin.php');
+    }
+
 		$admin_php=
 		'
 		<?php
@@ -116,6 +124,9 @@ function bdd_create($bdd_user,$bdd_host,$bdd_pass,$bdd_name,$bdd_use,$bdd_cre)
 	if($bdd_use=='oui')
 	{
 		global $bdd,$path,$path_w;
+	  if(is_file($path.'fonction/bdd.class.php')){
+		  unlink($path.'fonction/bdd.class.php');
+	  }
 		$bdd_class_str=
 		'
 		<?php
@@ -178,13 +189,18 @@ function bdd_create($bdd_user,$bdd_host,$bdd_pass,$bdd_name,$bdd_use,$bdd_cre)
 function create_admin($login,$mail,$pass,$pass2)
 {
 	global $bdd,$path,$path_w;
+
+  if(is_file($path.'admin/admin.xml')){
+	  unlink($path.'admin/admin.xml');
+  }
+
 	$id=1;
 	if($pass==$pass2)
 	{
 		$pass=hash('sha512',$pass);
 	}
 	$xml='<comptes><'.$login.' mail="'.$mail.'" id="'.$id.'">'.$pass.'</'.$login.'></comptes>';
-	if(file_put_contents($path.'/admin/admin.xml',$xml))
+	if(file_put_contents($path.'admin/admin.xml',$xml))
 	{
 		return true;
 	}
@@ -199,9 +215,7 @@ function create_admin($login,$mail,$pass,$pass2)
 function create_index()
 {
 	global $path,$path_w;
-
   unlink ($path_w.'/index.php');
-
 	$index_str=
 	'<?php
 
@@ -227,6 +241,11 @@ traite_fin_de_page();
 function create_goulot()
 {
 	global $path,$path_w;
+
+  if(is_file($path_w.'goulot.php')){
+	  unlink($path_w.'goulot.php');
+  }
+
 	$index_str=
 	'<?php
 
@@ -301,9 +320,10 @@ if($_POST['bdd_']=="oui")
 
 function create_js()
 {
-	global $path;
-	$js_str='var base_url='.$_POST['url'];
-	$js_str=file_get_contents($path.'install/void_js.js');
+	global $path,$base_url;
+
+        $js_str='var base_url="'.$base_url.'"';
+	$js_str.=file_get_contents($path.'install/void_js.js');
 	if(file_put_contents($path.'media/js/main.js',$js_str))
 	{
 		return true;
@@ -316,32 +336,36 @@ function create_js()
 	}
 }
 
-
- function create_mail($adresse_serveur,$port_serveur,$utilisateur,$mdp_mail)
-  {
-    global $path;
-    if(is_file($path.'fonction/mail.php')){
-    	unlink($path.'fonction/mail.php');
-    }
-    
-   	$mail_str=file_get_contents($path.'install/void_mail.php');
-  	$mail_str=str_replace('||adresse_serveur||', $adresse_serveur, $mail_str);
-  	$mail_str=str_replace('||port_serveur||', $port_serveur, $mail_str);
-  	$mail_str=str_replace('||utilisateur||', $utilisateur, $mail_str);
-  	$mail_str=str_replace('||mdp_mail||', $mdp_mail, $mail_str);
-
-    if(file_put_contents($path.'fonction/mail.php',$mail_str))
-	  {
-		  return true;
-	  }
-	  else
-	  {
-		  $erreur.='<div>creation du fichier nw/fonction/maiL.php</div>';
-		  echo $erreur;
-		  return false;
-	  }
+function create_mail($adresse_serveur,$port_serveur,$utilisateur,$mdp_mail)
+{
+  global $path;
+  if(is_file($path.'fonction/mail.php')){
+  	unlink($path.'fonction/mail.php');
   }
   
+ 	$mail_str=file_get_contents($path.'install/void_mail.php');
+	$mail_str=str_replace('||adresse_serveur||', $adresse_serveur, $mail_str);
+	$mail_str=str_replace('||port_serveur||', $port_serveur, $mail_str);
+	$mail_str=str_replace('||utilisateur||', $utilisateur, $mail_str);
+	$mail_str=str_replace('||mdp_mail||', $mdp_mail, $mail_str);
+
+  if(file_put_contents($path.'fonction/mail.php',$mail_str))
+  {
+	  return true;
+  }
+  else
+  {
+	  $erreur.='<div>creation du fichier nw/fonction/maiL.php</div>';
+	  echo $erreur;
+	  return false;
+  }
+}
+ 
+function suppr_install(){
+  global $path;
+  return rmdir_r_2($path.'/install');
+}
+ 
 function install_composant()
 {
   global $path,$path_w;
@@ -371,8 +395,12 @@ function install_composant()
 							  echo' ---> ok <br/>creation du fichier js';
 							  if(create_js())
 							  {
-								  echo' ---> ok <br/>suppression du fichier install.';
-								  return unlink($path_w.'install.php');
+								  echo' ---> ok <br/>suppression du dossier install';
+							    if(suppr_install())
+							    {
+								    echo' ---> ok <br/>suppression du fichier install';
+								    return unlink($path_w.'install.php');
+                  }
 							  }
 						  }
 					  }	
@@ -401,56 +429,58 @@ switch($_GET['action'])
 		<form method="post" action="install.php?action=admin">
 			<h3>configuration du système de fichier</h3>
 			<div>
-				<label for="admin_path_nw">Chemin du repertoire /nw</label><input type="text" id="admin_path_nw" name="admin_path_nw" />/nw/
+				<label for="admin_path_nw">Chemin du repertoire /nw </label><input type="text" id="admin_path_nw" name="admin_path_nw" />/nw/
           <div style="">c'est le repertoire de base, la ou se trouveront les fichiers de fonctions et les controlleurs</div>
 			</div>
 			<div>
-				<label for="admin_path_www">Chemin du repertoire /www</label><input type="text" id="admin_path_www" name="admin_path_www" />/www/
+				<label for="admin_path_www">Chemin du repertoire /www </label><input type="text" id="admin_path_www" name="admin_path_www" />/www/
           <div style="">c'est le repertoire web qui contiendrat les controlleurs maitre (index et goulot) ainsi ue les medias</div>
 			</div>
 			<div>
-				<label for="admin_path">Modification du chemin de l'admin</label><input type="text" id="admin_path" name="admin_path" />
+				<label for="admin_path">Modification du chemin de l'admin </label><input type="text" id="admin_path" name="admin_path" />
           <div style="">pour plus de securité, il faut modifie le chemin d'accés a l'interface d'administration</div>
 			</div>				
 			<div>
-				<label for="url">URL du projet</label><input type="text" id="url" name="url" />/
+				<label for="url">URL du projet </label><input type="text" id="url" name="url" />/
           <div style="">l'url qui permet l'accé au repertoire www depuis internet</div>
 			</div>
 			<h3>Configuration de la base de donnée admin</h3>
 			<div>
-				<label for="db_">utilisé une base de donnée</label> oui : <input type="radio" id="db_1" name="db_" value="oui" /> non : <input type="radio" id="db_2" name="db_" value="non" checked="true" />
+        <div>utilisé une base de donnée</div>
+        <label for="db_1">oui </label><input type="radio" id="db_1" name="db_" value="oui" /> 
+        <label for="db_2">non </label><input type="radio" id="db_2" name="db_" value="non" checked />
 			</div>
 			<div>
-				<label for="db_host">Hote de la base de donnée</label><input type="text" value="localhost" id="db_host" name="db_host" />
+				<label for="db_host">Hote de la base de donnée </label><input type="text" value="localhost" id="db_host" name="db_host" />
 			</div>
 			<div>
-				<label for="db_user">Utilisateur de la base de donnée</label><input type="text" value="root" id="db_user" name="db_user" />
+				<label for="db_user">Utilisateur de la base de donnée </label><input type="text" value="root" id="db_user" name="db_user" />
 			</div>
 			<div>
-				<label for="db_pass">Password de la base de donnée</label><input type="password" id="db_pass" name="db_pass" />
+				<label for="db_pass">Password de la base de donnée </label><input type="password" id="db_pass" name="db_pass" />
 			</div>
 			<div>
-				<label for="db_name">Nom de la base de donnée</label><input type="text" value="Balsa" id="db_name" name="db_name" />
+				<label for="db_name">Nom de la base de donnée </label><input type="text" value="Balsa" id="db_name" name="db_name" />
 				<p>
 				</p>
 			</div>
 			<div>
 				<div>Faut-il créer la base de donnée ? </div>
-				<label for="db_cre2">oui</label><input type="radio" value="1" id="db_cre2" name="db_cre" />
-				<label for="db_cre1">non</label><input type="radio" value="0" id="db_cre1" name="db_cre" checked="true" />
+				<label for="db_cre2">oui </label><input type="radio" value="1" id="db_cre2" name="db_cre" />
+				<label for="db_cre1">non </label><input type="radio" value="0" id="db_cre1" name="db_cre" checked="true" />
 			</div>
 			<h3>Création du compte admin</h3>
 			<div>
-				<label for="admin_login">Login admin</label><input type="text" value="Balsa_Admin" id="admin_login" name="admin_login" />
+				<label for="admin_login">Login admin </label><input type="text" value="Balsa_Admin" id="admin_login" name="admin_login" />
 			</div>
 			<div>
-				<label for="admin_pass">Password admin</label><input type="password" id="admin_pass" name="admin_pass" />
+				<label for="admin_pass">Password admin </label><input type="password" id="admin_pass" name="admin_pass" />
 			</div>
 			<div>
-				<label for="admin_pass_c">Confirmation password admin</label><input type="password" id="admin_pass_c" name="admin_pass_c" />
+				<label for="admin_pass_c">Confirmation password admin </label><input type="password" id="admin_pass_c" name="admin_pass_c" />
 			</div>
 			<div>
-				<label for="admin_mail">Mail de l'admin</label><input type="text" id="admin_mail" name="admin_mail" />
+				<label for="admin_mail">Mail de l'admin </label><input type="text" id="admin_mail" name="admin_mail" />
 			</div>			
 			<h3>configuration du serveur mail</h3>
 			<div>
@@ -499,6 +529,7 @@ switch($_GET['action'])
 		{
 			echo' ---> ok<br/><a href="'.$base_url.'admin.php">entrez dans la page d\'administration</a>';
 		}
+
 		break;
 }
 ?>

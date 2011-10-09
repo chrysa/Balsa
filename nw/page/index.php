@@ -10,7 +10,7 @@ global $get,$nom_projet;
 	</head>
 	<body>
 		<div class="site" id="site">
-			<h1>Bienvenue sur Balsa !</h1>
+			<h1><?php echo $nom_projet; ?></h1>
 			<?php
 			if(isset($get['page']))
 			{

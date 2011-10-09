@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<installer><fonction file="all"><libs></libs></fonction><page file="all"></page><ajax file="all"></ajax><media><css><file name="HelloWorld.css" type=""/></css><js><file name="HelloWorld.js" type="f"/></js><img></img></media><data></data></installer>
+<installer><fonction file="all"><libs></libs></fonction><page file="all"></page><hook file=""></hook><ajax file="all"></ajax><media><css><file name="HelloWorld.css" type=""/></css><js><file name="HelloWorld.js" type="f"/></js><img></img></media><data></data></installer>

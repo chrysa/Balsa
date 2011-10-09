@@ -24,7 +24,7 @@ function list_ajax_controller()
 			$display.=
 			'
 			<div class="page" id="page_'.$d.'">
-				<a href="'.$base_url.'goulot.php?page='.$d.'">'.$d.'</a>
+				<a href="'.$base_url.'goulot.php?page='.$d.'">'.str_replace('_',' ',$d).'</a>
 				<a target="_blank" href="'.$base_url.'admin.php?ajax_admin=1&module=editor&edit=ajax/'.$d2.'">éditer</a>
 			</div>
 			';
@@ -59,7 +59,7 @@ function list_page_controller()
 			'
 			<div class="page" id="page_'.$d.'">
 				<a href="'.$base_url.'index.php?page='.$d.'">'.$d.'</a>
-				<a target="_blank" href="'.$base_url.'admin.php?ajax_admin=1&module=editor&edit=page/'.$d2.'">éditer</a>
+				<a target="_blank" href="'.$base_url.'admin.php?ajax_admin=1&module=editor&edit=page/'.str_replace('_',' ',$d2).'">éditer</a>
 			</div>
 			';
 		}
@@ -93,7 +93,7 @@ function list_plugin()
 			$display.=
 			'
 			<div class="plugin" id="plug_'.$d.'">
-				<a href="'.$base_url.'admin.php?ajax_admin=1&module='.$d.'">'.$d.'</a>'.$_HOOK['display'].'
+				<a href="'.$base_url.'admin.php?ajax_admin=1&module='.$d.'">'.str_replace('_',' ',$d).'</a>'.$_HOOK['display'].'
 			</div>
 			';
 		}
@@ -122,7 +122,7 @@ function list_function()
 			$display.=
 			'
 			<div class="page" id="page_'.$d.'">
-				<a target="_blank" href="'.$base_url.'admin.php?ajax_admin=1&module=editor&edit=fonction/'.$d.'">'.$d.'</a>
+				<a target="_blank" href="'.$base_url.'admin.php?ajax_admin=1&module=editor&edit=fonction/'.$d.'">'.str_replace('_',' ',$d).'</a>
 			</div>
 			';
 		}
@@ -157,7 +157,7 @@ function list_js()
 			$display.=
 			'
 			<div class="js" id="js_'.$d.'">
-				<a href="'.$base_url.'admin.php?ajax_admin=1&module=editor&edit=media/js/'.$d.'" target="_blank">'.$d.'</a>
+				<a href="'.$base_url.'admin.php?ajax_admin=1&module=editor&edit=media/js/'.$d.'" target="_blank">'.str_replace('_',' ',$d).'</a>
 			</div>
 			';
 		}
@@ -187,7 +187,7 @@ function list_css()
 			$display.=
 			'
 			<div class="css" id="css_'.$d.'">
-				<a href="'.$base_url.'admin.php?ajax_admin=1&module=editor&edit=media/css/'.$d.'" target="_blank">'.$d.'</a>
+				<a href="'.$base_url.'admin.php?ajax_admin=1&module=editor&edit=media/css/'.$d.'" target="_blank">'.str_replace('_',' ',$d).'</a>
 			</div>
 			';
 		}

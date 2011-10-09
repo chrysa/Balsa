@@ -281,10 +281,10 @@ function inclure_text_pages($pages,$sep='',$dir='')
 }
 
 //compress the js files if needed and return the script tag to get it
-function inclure_js($min=false,$php=false)
+function inclure_js($min=false,$php=true)
 {
-	global $path,$base_url;
-	if(!is_file($path.'media/js/balsa_comp_js.php'))
+	global $path,$path_w,$base_url;
+	if(!is_file($path_w.'media/js/js.js') AND !is_file($path_w.'media/js/js.php'))
 	{
 		$pages=scandir($path.'media/js/');
 
@@ -294,13 +294,20 @@ function inclure_js($min=false,$php=false)
 		{
 			$js_str=compresse_text($js_str);
 		}
-		if(!file_put_contents($path.'media/js/balsa_comp_js.php',$js_str))
+    
+    if($php=='true'){
+      $nom='js.php';
+    }else{
+      $nom='js.js';
+    }
+
+		if(!file_put_contents($path_w.'media/js/'.$nom,$js_str))
 		{
 			return false;//$js_str;
 		}
 	}
 	
-	return '<script type="text/javascript" src="'.$base_url.'/media/js/js.php"></script>';
+	return '<script type="text/javascript" src="'.$base_url.'media/js/js.php"></script>';
 	
 }
 
@@ -308,7 +315,7 @@ function inclure_js($min=false,$php=false)
 function inclure_css($min=true,$php=false)
 {
 	global $path,$path_w,$base_url;
-	if(!is_file($path_w.'media/css/css.css'))
+	if(!is_file($path_w.'media/css/css.css') AND !is_file($path_w.'media/css/css.php'))
 	{
 		$pages=scandir($path.'media/css/');
 
@@ -318,7 +325,14 @@ function inclure_css($min=true,$php=false)
 		{
 			$css_str=compresse_text($css_str);
 		}
-		if(!file_put_contents($path_w.'media/css/css.css',$css_str))
+
+    if($php=='true'){
+      $nom='css.php';
+    }else{
+      $nom='css.css';
+    }
+
+		if(!file_put_contents($path_w.'media/css/'.$nom,$css_str))
 		{
 			return false;//$js_str;
 		}

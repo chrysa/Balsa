@@ -1,24 +1,51 @@
 CHANGELOG
 
-9 octobre 2011
-  - mise a jour avec la version 0.4c de DimitriGilbert
+0.4c :
 
-  - modification
-    - debug de la création de base de données (install.php/bdd.class.php)
-    - debug des fonctions chrysa_ qui ne pointait pas sur le plugin Helloword au lieu de celui du plugin
-    - récupération du $nom_projet dans
-      - nw/page/index.php
-      - nw/admin/plugin/explorer/index.php
-      - nw/admin/plugin/balsa_shell/balsa_shell.php
-      - nw/admin/plugin/controll_panel/controll_panel.php
+reprise de l'install du fork de chrysa
+	config de mail.php, de la langue et du nom du site dans install.php
+Creation des plugin chrysa_cache, chrysa_token et chrysa_debug
+	integration des fonctionnalité crée par Chrysa dans son fork sous forme de plugin Balsa.
+	
+	
+0.4d :
 
-  - passage d'une URL en dure a $base_url dans nw/admin/plugin/controll_panel/controll_pannel.php
+corection d'un bug dans l'installeur de plugins
+ajout des liens d'installation de plugin dans le controll_panel grace au hook 'after_plugin_link'
 
-  - ajout
-    - rajout du void_mail.php oublié dans le dossier install 
-    - rajout d'une redirection pour lancer l'install et suppression de l'index de redirection pendant l'install
-    - rajout de la gestion du cache depuis le panel
-    - lien de regénération des fichiers JS et CSS depuis le panel dans nw/admin/plugin/controll_panel/index.php nw/admin/plugin/controll_panel/controll_panel.php
+0.4e :
+ 
+ajout d'un uninstalleur de plugin
+ajout des liens de desintalation des plugins installer
 
-  - bug trouvé
-    - initialisation de l'éditeur en ligne
+0.4e-chrysa :
+
+ajout d'une redirection pour lancer l'install et suppression de l'index de redirection pendant l'install
+ajout du void_mail.php oublié dans le dossier install 
+ajout du void_js.js oublié dans le dossier d'install
+ajout de la suppression lors de l'installation des fichiers déja existants pour
+  www/admin.php
+  www/goulot.php
+  nw/fonction/bdd.class.php
+  nw/fonction/mail.php
+  nw/admin/admin.xml
+ajout de la suppression du dossier nw/install pendant l'installation
+ajout de la suppression des dossiers créé par les plugin admin
+ajout du déplacement et de la suppression des fichiers hooks des plugins admin
+ajout d'un retour booléen a la fonction rmdir_r_2()  (install.php)
+ajout de lien de regénération des fichiers JS et CSS depuis le panel dans nw/admin/plugin/controll_panel/index.php nw/admin/plugin/controll_panel/controll_panel.php
+ajout des noeud XML dans les fichier install des plugins admins et dans le void_install.xml
+modification de la fonction inclure_js() 
+  retrait d'un slash sur le return qui est déja contenu dans le $path
+  renommage des fichier pour inclure le bon fichier (suppression des fichiers $path.'media/js/balsa_comp_js.php' remplacé par $path_w.'media/js/js.php')
+  prise en compte du paramètre $php
+modification de la fonction inclure_css() pour la prise en compte du paramètre $php
+modification des fonctions chrysa_ pour les rendre installable et implémenter des fonctionnalités 
+debug de la création de base de données (install.php/bdd.class.php)
+debug de la fonction de création du fichier main.js (install.php)
+passage de l'URL en dure a $base_url dans nw/admin/plugin/controll_panel/controll_pannel.php
+récupération du $nom_projet dans
+  nw/page/index.php
+  nw/admin/plugin/explorer/index.php
+  nw/admin/plugin/balsa_shell/index.php
+  nw/admin/plugin/controll_panel/index.php
