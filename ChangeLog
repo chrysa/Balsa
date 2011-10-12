@@ -35,6 +35,8 @@ ajout du déplacement et de la suppression des fichiers hooks des plugins admin
 ajout d'un retour booléen a la fonction rmdir_r_2()  (install.php)
 ajout de lien de regénération des fichiers JS et CSS depuis le panel dans nw/admin/plugin/controll_panel/index.php nw/admin/plugin/controll_panel/controll_panel.php
 ajout des noeud XML dans les fichier install des plugins admins et dans le void_install.xml
+debug de la création de base de données (install.php/bdd.class.php)
+debug de la fonction de création du fichier main.js (install.php)
 modification de la fonction inclure_js() 
   retrait d'un slash sur le return qui est déja contenu dans le $path
   renommage des fichier pour inclure le bon fichier (suppression des fichiers $path.'media/js/balsa_comp_js.php' remplacé par $path_w.'media/js/js.php')
@@ -42,8 +44,6 @@ modification de la fonction inclure_js()
 modification de la fonction inclure_css() pour la prise en compte du paramètre $php
 modification des fonctions chrysa_ pour les rendre installable et implémenter des fonctionnalités 
 modification de la définition de la langues en bas de page init.php pour le rendre opérationnel supperssion du nw/ contenu dans le passs et suppression de $langage défini lors de l'installation
-debug de la création de base de données (install.php/bdd.class.php)
-debug de la fonction de création du fichier main.js (install.php)
 passage de l'URL en dure a $base_url dans nw/admin/plugin/controll_panel/controll_pannel.php
 récupération du $nom_projet dans
   nw/page/index.php
