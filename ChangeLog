@@ -41,6 +41,7 @@ modification de la fonction inclure_js()
   prise en compte du paramètre $php
 modification de la fonction inclure_css() pour la prise en compte du paramètre $php
 modification des fonctions chrysa_ pour les rendre installable et implémenter des fonctionnalités 
+modification de la définition de la langues en bas de page init.php pour le rendre opérationnel supperssion du nw/ contenu dans le passs et suppression de $langage défini lors de l'installation
 debug de la création de base de données (install.php/bdd.class.php)
 debug de la fonction de création du fichier main.js (install.php)
 passage de l'URL en dure a $base_url dans nw/admin/plugin/controll_panel/controll_pannel.php
