@@ -52,9 +52,7 @@ switch($action)
 		break;
 	case'regen_js':
                 unlink($path_w.'media/js/js.php');
-echo '1';
                 inclure_js();
-echo '2';
                 header('location: '.$base_url.'admin.php');
 		break;
 }
