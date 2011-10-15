@@ -18,35 +18,89 @@ ajout des liens d'installation de plugin dans le controll_panel grace au hook 'a
 ajout d'un uninstalleur de plugin
 ajout des liens de desintalation des plugins installer
 
-0.4e-chrysa :
+0.4f :
+	reprise en partie des modifications de l'install de chrysa 
+		ajout du void_mail.php oublié dans le dossier install
+		ajout du void_js.js oublié dans le dossier d'install
+		ajout de la suppression lors de l'installation des fichiers déja existants pour
+		  www/admin.php
+		  www/goulot.php
+		  nw/fonction/bdd.class.php
+		  nw/fonction/mail.php
+		  nw/admin/admin.xml
+		ajout d'un retour booléen a la fonction rmdir_r_2() (install.php)
+		debug de la création de base de données (install.php/bdd.class.php)
+		debug de la fonction de création du fichier main.js (install.php)
+		
+	reprise des modifications sur l'installer de plugin (rajout des hooks)
+	debut de creation de plugin_manager
+		pour avoir quelque chose de plus propre que les fichiers installer.php et uninstaller.php
+		
+	modification des fonctions chrysa_ pour les rendre installable et implémenter des fonctionnalités
+	
+	mise a jour des fonctionnalité d'appel de css (creation d'un fichier php dans nw/media/css/balsa_comp_css.php) contenant tout les css concatenés inclus par le fichier www/media/css/css.php
+	
+	prise en charge de la variable page_admin
+		mise en place d'un header et footer commun pour toutes les page admin,
+	
+	modification du controll_panel
+		suppression du cache js et css
+		ajout de la creation des menu : 
+			lors de l'install des plugins, si un fichier "menu.php" est trouver dans le dossier du plugin, il sera appeler lors de la generation du menu dans le controll_panel
+			inversement au uninstall
+			les differents menu a appeler sont stocker dans nw/admin/plugin/controll_panel/data/menu.xml
+		sous page differencier pour visionner les fichiers (ajax, page,js, css, plugin, fonction)
+		creation de l'entree du menu avec son sous-menu	
+	
+	rajout de hook :
+		nw/fonction/fonction.php
+			before_traite_fin_page
+			traite_fin_page_complete_report
+			before_valid_input
+			valid_input_false
+			after_valid_input
+			before_is_logged
+			before_report_erreur
+		nw/admin/plugin/controll_panel/controll_panel.php
+			after_plugin_link
+		nw/admin/plugin/installer.php
+			after_plugin_install
+		nw/admin/plugin/uninstaller.php
+			after_plugin_uninstall
+			
+0.4g :
+	reprise du fork de Rudak
+		style pour l'install (\o/, yeah, it's not a blank page anymore :D)
+		suppression de la notice du a $_GET['action'] 
+		
+0.4h :
+	mise en place de la class plugin_manager dans nw/admin/plugin/installer.php et dans nw/admin/plugin/uninstaller.php 
+	correction de l'install qui copier void_bbd.class pour goulot.php
+	lise a jour du wiki pour l'installation et l'utilisation
+	rajout de hook
+		nw/page/index.php
+			index_before_inclure_page
+			index_after_inclure_page
+		nw/init.php
+			after_init		
+		www/goulot.php
+			index_before_inclure_ajax
+			index_after_inclure_ajax
 
-ajout d'une redirection pour lancer l'install et suppression de l'index de redirection pendant l'install
-ajout du void_mail.php oublié dans le dossier install 
-ajout du void_js.js oublié dans le dossier d'install
-ajout de la suppression lors de l'installation des fichiers déja existants pour
-  www/admin.php
-  www/goulot.php
-  nw/fonction/bdd.class.php
-  nw/fonction/mail.php
-  nw/admin/admin.xml
-ajout de la suppression du dossier nw/install pendant l'installation
-ajout de la suppression des dossiers créé par les plugin admin
-ajout du déplacement et de la suppression des fichiers hooks des plugins admin
-ajout d'un retour booléen a la fonction rmdir_r_2()  (install.php)
-ajout de lien de regénération des fichiers JS et CSS depuis le panel dans nw/admin/plugin/controll_panel/index.php nw/admin/plugin/controll_panel/controll_panel.php
-ajout des noeud XML dans les fichier install des plugins admins et dans le void_install.xml
-debug de la création de base de données (install.php/bdd.class.php)
-debug de la fonction de création du fichier main.js (install.php)
-modification de la fonction inclure_js() 
-  retrait d'un slash sur le return qui est déja contenu dans le $path
-  renommage des fichier pour inclure le bon fichier (suppression des fichiers $path.'media/js/balsa_comp_js.php' remplacé par $path_w.'media/js/js.php')
-  prise en compte du paramètre $php
-modification de la fonction inclure_css() pour la prise en compte du paramètre $php
-modification des fonctions chrysa_ pour les rendre installable et implémenter des fonctionnalités 
-modification de la définition de la langues en bas de page init.php pour le rendre opérationnel supperssion du nw/ contenu dans le passs et suppression de $langage défini lors de l'installation
-passage de l'URL en dure a $base_url dans nw/admin/plugin/controll_panel/controll_pannel.php
-récupération du $nom_projet dans
-  nw/page/index.php
-  nw/admin/plugin/explorer/index.php
-  nw/admin/plugin/balsa_shell/index.php
-  nw/admin/plugin/controll_panel/index.php
+0.4i :
+	ajout du slash après fonction L.59 de install.php => installation active
+	ajout du test d'existence de la page index L.180 www/install.php
+  ajout d'un fichier hook d'appel des fonction dans chrysa_cache
+  ajout de la suppression des dossier des créé par les plugins lors de la désinstallation clearDir() nw/admin/plugin/manager.php => pour éviter des soucis de dossier déja existant lors de la réinstallation du plugin
+  ajout du nom du site en global L.1 nw/admin/page/header.php
+  ajout de la possiblité d'uploader des plugins au format .zip nw/admin/plugin/upload/+onglet
+  ajout de la possibilité de laisser le noeud file vide dans le XML d'installation des plugin en rajoutant ce cas dans les fonction install() et unistall() de nw/admin/manager.php
+  ajout tu plugin de gestion du multilingue (74 langues utilisables)
+  ajout du hook after_init.php contenant la sélection de la langue
+  modification oubliée du BDD.class pour permettre la création de la base de donnée L.1 - L.29 nw/install/void_bdd.class.php => création de base de données a nouveau active  
+  modification de la L.7 dans nw/admin/plugin/controll_panel/controll_panel.css.php pour afficher la douleur de fond des sous-menus
+  suppression de nw/ de la langue L.117 init.php car déja défini dans le $path
+  suppression des underscore lors de l'affichage des noms dans nw/admin/plugin/controll_panel/controll_panel.php nw/admin/plugin/manager.php
+  suppression de l'array afficher lors de l'installation d'un plugin L.127  nw/admin/plugin/manager.php
+  supression d'un </div> L.210 nw/admin/plugin/controll_panel/controll_panel.php => permet d'avoir un panel sur toute la largeur de l'écran au lieu d'un panel qui se compresse a cause des onglets
+  suppression du slash entre $base_url et admin dans  nw/hook/after_plugin_link.php L.10 et L.17 ca faisait doublon

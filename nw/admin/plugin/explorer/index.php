@@ -1,5 +1,5 @@
 <?php
-global $path,$path_w,$bdd,$base_url,$nom_projet;
+global $path,$path_w,$bdd,$base_url;
 include_once($path.'admin/plugin/explorer/explorer.php');
 $ex=new explorer();
 $action=$_GET['action'];
@@ -12,7 +12,7 @@ switch($action)
 	<head>
 		<link rel="stylesheet" href="<?php echo $base_url; ?>admin.php?ajax_admin=1&module=explorer&action=css" type="text/css" media="all" />
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title><?php echo $nom_projet ?></title>
+		<title>Mon projet avec Balsa</title>
 	</head>
 	<body>
 		<div class="site" id="site">

@@ -1,3 +1,4 @@
+
 function file(url)
 {
 	if (window.XMLHttpRequest)

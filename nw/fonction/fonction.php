@@ -24,6 +24,7 @@ function plop($s="")
 //check if the current request have a session open and logged
 function is_logged()
 {
+	hook('before_is_logged',array());
 	if(isset($_SESSION['user_id']) and $_SESSION['user_id']!='')
 	{
 		return true;
@@ -38,7 +39,7 @@ function is_logged()
 //if you want to add regex send me a mail with yours and i will implement them :)
 function valid_input($input,$checker=array('default'))
 {
-	
+	hook('before_valid_input',array('input'=>$input));
 	foreach($checker as $check)
 	{
 		$c=pre_reg($check);
@@ -48,6 +49,7 @@ function valid_input($input,$checker=array('default'))
 			{
 				if(preg_match($c2,$input))
 				{
+					hook('valid_input_false',array('input'=>$input,'checker'=>$c2));
 					return false;
 				}
 			}
@@ -56,11 +58,14 @@ function valid_input($input,$checker=array('default'))
 		{
 			if(preg_match($c,$input))
 			{
+				hook('valid_input_false',array('input'=>$input,'checker'=>$c));
 				return false;
 			}
 		}
 		
 	}
+	
+	hook('after_valid_input',array('input'=>$input));
 	return true;
 	
 }
@@ -89,6 +94,7 @@ function report_erreur($type,$erreur,$return=false)
 {
 	//les erreurs sont stockée dans un tableau, chaque entrée se rentre de la maniere suivante
 	//<le_type_de_l'erreur>_<le_descriptif_de_l'erreur>
+	hook('before_report_erreur',array('type'=>$type,'erreur'=>$erreur));
 	$_SESSION['erreurs'][$_SESSION['count_erreurs']]=$type.'_'.$erreur;
 	$_SESSION['count_erreurs']++;
 	if($return!==false)
@@ -126,8 +132,8 @@ function traite_erreur($erreurs)
 //add logs and finish the page process :)
 function traite_fin_de_page()
 {
-	global $get;
-	global $path;
+	global $get, $path;
+	hook('before_traite_fin_page',array());
 	$gen_time=microtime()-$_SESSION['in_time'];
 	$rapport=
 	'
@@ -170,7 +176,8 @@ function traite_fin_de_page()
 			</erreurs>
 		';
 	}
-	$rapport.=
+	hook('traite_fin_de_page_compete_report',array("report"=>$rapport));
+	$rapport.=$_HOOK['report'];
 	'
 			</client>
 		</requete>
@@ -281,10 +288,10 @@ function inclure_text_pages($pages,$sep='',$dir='')
 }
 
 //compress the js files if needed and return the script tag to get it
-function inclure_js($min=false,$php=true)
+function inclure_js($min=false,$php=false)
 {
-	global $path,$path_w,$base_url;
-	if(!is_file($path_w.'media/js/js.js') AND !is_file($path_w.'media/js/js.php'))
+	global $path,$base_url;
+	if(!is_file($path.'media/js/balsa_comp_js.php'))
 	{
 		$pages=scandir($path.'media/js/');
 
@@ -294,20 +301,13 @@ function inclure_js($min=false,$php=true)
 		{
 			$js_str=compresse_text($js_str);
 		}
-    
-    if($php=='true'){
-      $nom='js.php';
-    }else{
-      $nom='js.js';
-    }
-
-		if(!file_put_contents($path_w.'media/js/'.$nom,$js_str))
+		if(!file_put_contents($path.'media/js/balsa_comp_js.php',$js_str))
 		{
 			return false;//$js_str;
 		}
 	}
 	
-	return '<script type="text/javascript" src="'.$base_url.'media/js/js.php"></script>';
+	return '<script type="text/javascript" src="'.$base_url.'/media/js/js.php"></script>';
 	
 }
 
@@ -315,7 +315,7 @@ function inclure_js($min=false,$php=true)
 function inclure_css($min=true,$php=false)
 {
 	global $path,$path_w,$base_url;
-	if(!is_file($path_w.'media/css/css.css') AND !is_file($path_w.'media/css/css.php'))
+	if(!is_file($path_w.'media/css/css.css'))
 	{
 		$pages=scandir($path.'media/css/');
 
@@ -325,20 +325,13 @@ function inclure_css($min=true,$php=false)
 		{
 			$css_str=compresse_text($css_str);
 		}
-
-    if($php=='true'){
-      $nom='css.php';
-    }else{
-      $nom='css.css';
-    }
-
-		if(!file_put_contents($path_w.'media/css/'.$nom,$css_str))
+		if(!file_put_contents($path.'media/css/balsa_comp_css.php',$css_str))
 		{
 			return false;//$js_str;
 		}
 	}
 	
-	return '<link rel="stylesheet" href="'.$base_url.'media/css/css.css" type="text/css" media="all" />';
+	return '<link rel="stylesheet" href="'.$base_url.'media/css/css.php" type="text/css" media="all" />';
 	
 }
 
