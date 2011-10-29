@@ -477,12 +477,15 @@ function rmdir_r($dir)
     foreach ($files as $file) {
         $file = $dir . '/' . $file;
         if (is_dir($file)) {
-            rmdir_recursive($file);
-            rmdir($file);
+            rmdir_r($file);
         } else {
             unlink($file);
         }
     }
-    rmdir($dir);
+    if(rmdir($dir)){
+        return true;
+    }else{
+        return false;
+    }
 }
 ?>

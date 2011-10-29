@@ -1,4 +1,3 @@
-
 /*ACCESS------------------------------------------------------*/
 #access{height:50px;background:#F7F7F7;border-bottom:1px solid #dfdfdf;}
 .menus{height:60px;width:100%;min-width:1000px;margin:0 auto;z-index:10;}

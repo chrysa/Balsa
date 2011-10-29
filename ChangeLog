@@ -1,7 +1,6 @@
 CHANGELOG
 
 0.4c :
-
 reprise de l'install du fork de chrysa
 	config de mail.php, de la langue et du nom du site dans install.php
 Creation des plugin chrysa_cache, chrysa_token et chrysa_debug
@@ -9,12 +8,10 @@ Creation des plugin chrysa_cache, chrysa_token et chrysa_debug
 	
 	
 0.4d :
-
 corection d'un bug dans l'installeur de plugins
 ajout des liens d'installation de plugin dans le controll_panel grace au hook 'after_plugin_link'
 
 0.4e :
- 
 ajout d'un uninstalleur de plugin
 ajout des liens de desintalation des plugins installer
 
@@ -86,21 +83,35 @@ ajout des liens de desintalation des plugins installer
 		www/goulot.php
 			index_before_inclure_ajax
 			index_after_inclure_ajax
-
+			
 0.4i :
-	ajout du slash après fonction L.59 de install.php => installation active
-	ajout du test d'existence de la page index L.180 www/install.php
-  ajout d'un fichier hook d'appel des fonction dans chrysa_cache
-  ajout de la suppression des dossier des créé par les plugins lors de la désinstallation clearDir() nw/admin/plugin/manager.php => pour éviter des soucis de dossier déja existant lors de la réinstallation du plugin
-  ajout du nom du site en global L.1 nw/admin/page/header.php
-  ajout de la possiblité d'uploader des plugins au format .zip nw/admin/plugin/upload/+onglet
-  ajout de la possibilité de laisser le noeud file vide dans le XML d'installation des plugin en rajoutant ce cas dans les fonction install() et unistall() de nw/admin/manager.php
-  ajout tu plugin de gestion du multilingue (74 langues utilisables)
-  ajout du hook after_init.php contenant la sélection de la langue
-  modification oubliée du BDD.class pour permettre la création de la base de donnée L.1 - L.29 nw/install/void_bdd.class.php => création de base de données a nouveau active  
-  modification de la L.7 dans nw/admin/plugin/controll_panel/controll_panel.css.php pour afficher la douleur de fond des sous-menus
-  suppression de nw/ de la langue L.117 init.php car déja défini dans le $path
-  suppression des underscore lors de l'affichage des noms dans nw/admin/plugin/controll_panel/controll_panel.php nw/admin/plugin/manager.php
-  suppression de l'array afficher lors de l'installation d'un plugin L.127  nw/admin/plugin/manager.php
-  supression d'un </div> L.210 nw/admin/plugin/controll_panel/controll_panel.php => permet d'avoir un panel sur toute la largeur de l'écran au lieu d'un panel qui se compresse a cause des onglets
-  suppression du slash entre $base_url et admin dans  nw/hook/after_plugin_link.php L.10 et L.17 ca faisait doublon
+	reprise de la plupart des modifications de chrysa :
+		correction de bug diverse (serapporter a https://github.com/chrysa/Balsa/commit/4ad182ce3d69d5a68824a10329ee4775e043022c#diff-0)
+		fichier hook after_init.php modifié,
+		uploader de plugins (au format zip)
+		possibilité de neoud fils vide dans les fichier d'install xml
+		plugin de gestion multilingue
+
+0.4j :
+     /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\
+    /!\   remise du BON void_bdd_class dans nw/install => création de base de données OK     /!\
+   /!\  en espérant que cette foie il soit intégré => besoin partiel pour un  plugin a venir  /!\                           
+  /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\  
+  modificaction du lien du changelog de la 0.4i pour qu'il pointe en permanence vers les correctifs a voir
+  modification de la fonction rmdir_r() dans nw/fonction/fonction.php => maintenant fonctionnelle et renvoi un booléen
+	ajout de la suppression de $path.'media/js/balsa_comp_js.php a l'install L.288
+	ajout de la gestion des plugin dans le controll_panel 
+		- affinage de la redirection après installation/désinstallation de plugins nw/admin/plugin/manager.php L.105 et L.113
+		- modification de libélé dans nw/admin/plugin/controll_panle/menu.php
+		- ajout de la page gestion_plugin.php
+			- reprise de l'upload
+				- ajout d'un lien d'installation direct depuis l'interface d'upload dans le message de confirmation
+			- ajout du téléchargement
+			- ajout d'une page dédiée a la gestion des plugins aditionnels
+			- clarification des plugins sur l'index
+			- modification de nw/admin/plugin/controll_panle/controll_panel.php
+				- suppression de list_plugin()
+				- ajout de list_plugin_install() => affichage des plugins installés
+				- ajout de list_plugin_add() => affichage des plugins aditionnels
+				- ajout de list_plugin_dl() => affichage des plguins téléchargables 
+				- ajout de list_plugin_delete() => affichage des plugins supprimables

@@ -28,7 +28,8 @@ class plugin_manager
 	function install($quoi,$node)
 	{
 		global $path;
-		if($node->getAttribute('file')!=''){
+		if($node->getAttribute('file')!='')
+		{
 			if($node->getAttribute('file')!='all')
 			{
 				$f_list=$node->childNodes;
@@ -41,34 +42,32 @@ class plugin_manager
 			{
 				copy_r($this->path.$quoi,$path.$quoi);
 			}
-		}
+		}		
 	}
 	
 	function uninstall($quoi,$node)
 	{
 		global $path;
-		if($node->getAttribute('file')!=''){
-			if($node->getAttribute('file')!='all')
+		if($node->getAttribute('file')!='all')
+		{
+			$f_list=$node->childNodes;
+			foreach($f_list as $f)
 			{
-				$f_list=$node->childNodes;
-				foreach($f_list as $f)
-				{
-					unlink($path.$quoi.'/'.$f->getAttribute('name'));
-				}
+				unlink($path.$quoi.'/'.$f->getAttribute('name'));
 			}
-			else
+		}
+		else
+		{
+			$all=scandir($this->path.$quoi);
+			foreach($all as $a_fn)
 			{
-				$all=scandir($this->path.$quoi);
-				foreach($all as $a_fn)
+				if($a_fn=='.' or $a_fn=='..')
 				{
-					if($a_fn=='.' or $a_fn=='..')
-					{
-						continue;
-					}
-					else
-					{
-						unlink($path.$quoi.'/'.$a_fn);
-					}
+					continue;
+				}
+				else
+				{
+					unlink($path.$quoi.'/'.$a_fn);
 				}
 			}
 		}
@@ -82,51 +81,31 @@ class plugin_manager
 		{
 		  if($f->getAttribute('parent')=='')
 		  {
-		    mkdir($path.'data/'.$f->getAttribute('name'));
-		  }
+		  	if(!is_dir($path.'data/'.$f->getAttribute('name')))
+		  	{
+		  		mkdir($path.'data/'.$f->getAttribute('name'));
+		  	}		
+				if(is_dir($path.'admin/plugin/'.$this->name.'/data/'.$f->getAttribute('name'))){				
+					$data=scandir($path.'admin/plugin/'.$this->name.'/data/'.$f->getAttribute('name'));
+					foreach($data as  $d){
+						copy_r($this->path.'data/'.$f->getAttribute('name').'/'.$d,$path.'data/'.$f->getAttribute('name').'/'.$d);
+					}
+				}
+			}
 		  else
 		  {
-		    mkdir($path.'data/ '.$f->getAttribute('parent').'/'.$f->getAttribute('name') );
+		  	if(!is_dir($path.'data/'.$f->getAttribute('parent').'/'.$f->getAttribute('name')))
+		  	{
+		  		mkdir($path.'data/'.$f->getAttribute('parent').'/'.$f->getAttribute('name'));
+		  	}		    
+				if(is_dir($path.'data/'.$f->getAttribute('parent').'/'.$f->getAttribute('name'))){				
+					$data=scandir($path.'data/'.$f->getAttribute('parent').'/'.$f->getAttribute('name'));
+					foreach($data as  $d){
+						copy_r($this->path.'data/'.$f->getAttribute('parent').'/'.$f->getAttribute('name').'/'.$d,$path.'data/'.$f->getAttribute('parent').'/'.$f->getAttribute('name').'/'.$d);
+					}
+				}
 		  }
 		}
-	}
-
-	function uninstall_data()
-	{
-		global $path;
-		$fold=$this->xml->getElementsByTagName('folder');
-		foreach($fold as $f)
-		{
-			if($f->getAttribute('parent')=='')
-			{
-				$chemin=$path.'data/'.$f->getAttribute('name');
-			}
-			else
-			{
-				$chemin=$path.'data/ '.$f->getAttribute('parent').'/'.$f->getAttribute('name');
-			}
-		}
-		$this->clearDir($chemin);
-	}
-	
-	function clearDir($dossier) {
-		$ouverture=opendir($dossier);
-		if (!$ouverture) return;
-		while($fichier=readdir($ouverture)) {
-			if ($fichier == '.' || $fichier == '..') continue;
-				if (is_dir($dossier."/".$fichier)) {
-					$r=$this->clearDir($dossier."/".$fichier);
-					if (!$r) return false;
-				}
-				else {
-					$r=unlink($dossier."/".$fichier);
-					if (!$r) return false;
-				}
-		}
-	closedir($ouverture);
-	$r=rmdir($dossier);
-	if (!$r) return false;
-		return true;
 	}
 	
 	function install_flag()
@@ -135,7 +114,7 @@ class plugin_manager
 		$install_t=fopen($this->path.'installed','a');
 		fclose($install_t);
 		hook('after_plugin_install',array('plugin'=>$this->name));
-		echo 'l\'installation de '.str_replace('_',' ',$this->name).' c\'est bien deroule<br/><a href="'.$base_url.'admin.php">retour a l\'admin</a>';
+		echo 'l\'installation de '.$this->name.' c\'est bien deroule<br/><a href="'.$base_url.'admin.php?page_admin=a&module=controll_panel&action=plugin">retour à la gestion des plugins</a>';
 	}
 		
 	function uninstall_flag()
@@ -143,7 +122,7 @@ class plugin_manager
 		global $base_url;
 		unlink($this->path.'installed');
 		hook('after_plugin_uninstall',array('plugin'=>$this->name));
-		echo 'la desinstallation de '.str_replace('_',' ',$this->name).' c\'est bien deroule<br/><a href="'.$base_url.'admin.php">retour a l\'admin</a>';
+		echo 'la desinstallation de '.$this->name.' c\'est bien deroule<br/><a href="'.$base_url.'admin.php?page_admin=a&module=controll_panel&action=plugin">retour à la gestion des plugins</a>';
 	}
 	
 	function install_all()
@@ -189,8 +168,6 @@ class plugin_manager
 			}
 			$this->uninstall($t,$this->xml->getElementsByTagName($t2)->item(0));
 		}		
-		//suppression des dossier créés
-		$this->uninstall_data();
 		//reste les image a desintaller !!	
 		$this->uninstall_flag();
 	}
