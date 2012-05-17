@@ -29,4 +29,13 @@
 <data>
 <folder name="data_folder_name" parent="path_of_the_parent(void if parent is nw/data/)" />
 </data>
+<sql>
+<file name="file_name">
+<table name="name_of_table"/>
+</file>	
+</sql>
+<lang>
+<file lang_code="locale/language_code" name="file_name"/>
+</lang>
 </installer>
+

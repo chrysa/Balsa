@@ -92,11 +92,7 @@ ajout des liens de desintalation des plugins installer
 		possibilité de neoud fils vide dans les fichier d'install xml
 		plugin de gestion multilingue
 
-0.4j :
-     /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\
-    /!\   remise du BON void_bdd_class dans nw/install => création de base de données OK     /!\
-   /!\  en espérant que cette foie il soit intégré => besoin partiel pour un  plugin a venir  /!\                           
-  /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\  
+0.4j (by chrysa): 
   modificaction du lien du changelog de la 0.4i pour qu'il pointe en permanence vers les correctifs a voir
   modification de la fonction rmdir_r() dans nw/fonction/fonction.php => maintenant fonctionnelle et renvoi un booléen
 	ajout de la suppression de $path.'media/js/balsa_comp_js.php a l'install L.288
@@ -115,3 +111,86 @@ ajout des liens de desintalation des plugins installer
 				- ajout de list_plugin_add() => affichage des plugins aditionnels
 				- ajout de list_plugin_dl() => affichage des plguins téléchargables 
 				- ajout de list_plugin_delete() => affichage des plugins supprimables
+				
+0.4k :
+	mise ajour de jsinterface.js
+		ajout de classe :
+			IS : un testeur de type
+			Docel : selection d'elements de la page
+			Docmap : information et modification de la structure de la page
+			Timer : gestion de timer (intervalle ou compte de temps)
+			Animation : un module d'animation
+		/!\ Timer et animation ne sont PAS DU TOUT stable !! /!\
+	ajout de jsmin.php dans libpour compresser le js
+		compresse_text() modifier
+		
+0.5.0.0 : 
+	ajout de nombreuses fonctions de manipulation de temps
+	ajout de la class bdd_entity
+		manipulation facilité de table de bdd, 
+		exemple a venir dans le hellowworld ;)
+	avancé du activity_logger
+	
+0.5.0.1
+	bug non résolus
+		bug de l'explorer de fichier
+
+	modification
+		suppression du plugin chrysa_blog vide inutile actuellement
+		suppression de /nw/install/void_js.js car inutil
+		suppression du dossier /nw/admin/plugin/gestion_pugin car intégré au controll_panel
+
+		/www/install.php
+			ajout de l'affichage du chemin de fichiers actuel
+			ajout de l'affichage de l'url actuelle
+			ajout de la suppression du main.js lors de l'installation et test d'existence du balsa_comp_js.php avant la supression
+			ajout d'une requète d'ajout d'un comptes admin dans la table admin en cas d'utilisation de DB dans la fonction create_admin
+			ajout du choix de la timezone pendant l'installation et dans l'init
+			ajout d'un array contenant les langues pour la liste déroulante
+			modification du placement des message de confirmation
+
+    /nw/install/void_init.php
+			ajout d'un autoloader pour les classes POO  non effectif pour la fonction de mails
+			attribution de $post pour conformer avec $get
+      suppression du double appel du fichier fonction.php
+			modification de l'appel des fichiers fonctions avec un appel de toutes les fonctions présentes
+			modification de l'attribution de la page d'accueil passage de $get à $_GET pour pouvoir initialiser corretement la page d'accueil avec le goulot
+    
+		/nw/install/void_mail.php
+			débuggue léger de l'appel des fichiers
+    
+    /nw/hook/after_plugin_link.php
+      suppression d'un slash inutil dans les URL pour l'installation et la désinstallation
+            
+		/nw/fonction/fonction.php
+			modification des fonction de compression et de décompression pour la prise en charge de différents formats compress_dir()/uncompress_dir()
+			
+		/nw/amdin/plugins/controll_panel/controller_panel.php
+			ajout d'une note avertissant la conservation de données lors de la désactivation de plugin list_plugin_add()
+            
+    /nw/amdin/plugins/controll_panel/gestion_plugin.php
+			refonte de la page
+			ajout d'une note avertissant la conservation de données lors de la suppression de plugin
+			ajout de la prise en compte des fichiers SQL pour le téléchargement
+			ajout d'un message de prévention pour le up de plugins pour l'activation auto du plugin chrysa_lang dans le cas de présence de fichier langue dans les plugins
+			debug de la compression et de la décompression d'archives avec les fonction natives de balsa
+      
+		/nw/admin/plugin/void_install.xml
+			rajout de la possibilité de mettre du SQL dans le gabarit d'install de plugs
+      rajout de la possibilité de mettre des fichier langues
+      
+		/nw/amdim/plugins/manager.php
+			rajout de régénération de CSS et JS lors de l'install/uninstall de plugins
+			rajout de la prise en compte de fichiers SQL lors de l'install ou du téléchargement de plugins
+      rajout de la prise en compte des fichiers langues
+			rajout de régénération du fichier langue global lors de l'installation de plugins
+      
+    /nw/admin/page/header.php
+      rajout de la vatiable globale $base_url appelé plus bas dans le code
+      
+	a tester
+		la gestion des plugins
+
+	a faire
+		intégrer la prise en charge des fichiers SQL dans le plugin packager => impossible tant que l'explorer de fichier n'est pas débuggué
+		intégrer la prise en charge des fichiers langues dans le plugin packager => impossible tant que l'explorer de fichier n'est pas débuggué

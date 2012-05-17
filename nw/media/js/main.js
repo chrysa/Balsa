@@ -1,4 +1,4 @@
-var base_url="http://127.0.0.1/Balsa/www/"
+var base_url="http://localhost/sites/dev/Git/Balsa/Balsa_test/www/"
 function file(url)
 {
 	if (window.XMLHttpRequest)

@@ -2,7 +2,7 @@
 
 function mail_de_base($adr,$subject,$message,$from='someone@yopmail.com',$reply='no_reply@yopmail.com')
 {
-  inclure_fonction('lib/mailer/class.phpmailer.php');
+  include_once('lib/mailer/class.phpmailer.php');
   $mail = new PHPMailer();
 
   $mail->AddAddress($adr, '');
@@ -35,7 +35,7 @@ function mail_de_base($adr,$subject,$message,$from='someone@yopmail.com',$reply=
 //$pj est le chemin vers la piece jointe (peut etre un tableau de chemin), $pjn est le nom de la piece jointe(peut etre un tab aussi :)
 function mail_plus_piece_jointe($adr,$subject,$message,$pj,$pjn,$from='someone@yopmail.com',$reply='no_reply@yopmail.com')
 {
-  inclure_fonction('lib/mailer/class.phpmailer.php');
+  include_once('lib/mailer/class.phpmailer.php');
   $mail = new PHPMailer();
 
   $mail->AddAddress($adr, '');

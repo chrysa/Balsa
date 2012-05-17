@@ -176,6 +176,17 @@
 			if ($pass == $pass2) {
 				$pass = hash('sha512', $pass);
 			}
+			
+			if($db_==='oui'){
+				if($bdd->query2("INSERT INTO admin (`id`, `login`,`mail` ,`pass`) VALUES ('".$bdd->get_primkey()."', '".$login."', '".$mail."', '".$pass."')")){
+					$admin_db=true;
+				}else{
+					$admin_db=false;
+				}
+			}else{
+				$admin_db=true;
+			}
+			
 			$xml = '<comptes><' . $login . ' mail="' . $mail . '" id="' . $id . '">' . $pass . '</' . $login . '></comptes>';
 			if (file_put_contents($path . 'admin/admin.xml', $xml)) {
 				return true;
@@ -203,7 +214,7 @@ inclure_page(\'index\');
 traite_fin_de_page();
 ?>
 	';
-	
+
 			if (file_put_contents($path_w . 'index.php', $index_str)) {
 				return true;
 			} else {
@@ -213,7 +224,7 @@ traite_fin_de_page();
 			}
 		}
 
-		function create_goulot() {
+  	function create_goulot() {
 			global $path, $path_w;
 
 			if (is_file($path_w . 'goulot.php')) {
@@ -258,8 +269,8 @@ $nom_projet=\'' . $_POST['projet_nom'] . '\';
 
 $langage=\'' . $_POST['lang'] . '.utf8\';
 
-//inclusion de fonction de base
-include_once $path.\'fonction/fonction.php\';
+//définition de la timezone
+date_default_timezone_set(\''.$_POST['timezone'].'\');
 ';
 			if ($_POST['bdd_'] == "oui") {
 				$int_str.=
@@ -285,7 +296,14 @@ include_once $path.\'fonction/fonction.php\';
 
 		function create_js() {
 			global $path, $base_url;
-			unlink($path.'media/js/balsa_comp_js.php');
+			if (is_file($path.'media/js/balsa_comp_js.php')) {
+				unlink($path.'media/js/balsa_comp_js.php');
+			}
+			
+			if (is_file($path.'media/js/main.js')) {
+				unlink($path.'media/js/main.js');
+			}
+			
 			$js_str = 'var base_url="' . $base_url . '"';
 			$js_str.=file_get_contents($path . 'install/void_main.js');
 			if (file_put_contents($path . 'media/js/main.js', $js_str)) {
@@ -379,14 +397,21 @@ include_once $path.\'fonction/fonction.php\';
 					<form method="post" action="install.php?action=admin">
 						<div class="configStep">
 							<h3>Configuration du système de fichier</h3>
+								<?php
+									$chemin_fichier=substr(realpath('install.php'),0,-16);
+									$url_actuelle='http://'.substr($_SERVER["SERVER_NAME"].$_SERVER['REQUEST_URI'],0,-12);
+								?>
+							<div class='info'>
+								chemin actuel des dossiers : <?php	echo $chemin_fichier; ?>
+							</div>
 							<div>
 								<label for="admin_path_nw">Chemin du repertoire /nw </label>
-								<input type="text" id="admin_path_nw" name="admin_path_nw" />/nw/
+								<input type="text" id="admin_path_nw" name="admin_path_nw" value="<?php	echo $chemin_fichier ?>"/>/nw/
 								<div class='info'>C'est le repertoire de base, la ou se trouveront les fichiers de fonctions et les controlleurs</div>
 							</div>
 							<div>
 								<label for="admin_path_www">Chemin du repertoire /www </label>
-								<input type="text" id="admin_path_www" name="admin_path_www" />/www/
+								<input type="text" id="admin_path_www" name="admin_path_www" value="<?php	echo $chemin_fichier ?>" />/www/
 								<div  class='info'>C'est le repertoire web qui contiendrat les controlleurs maitre (index et goulot) ainsi ue les medias</div>
 							</div>
 							<div>
@@ -394,11 +419,13 @@ include_once $path.\'fonction/fonction.php\';
 								<input type="text" id="admin_path" name="admin_path" />
 								<div  class='info'>Pour plus de securité, il faut modifie le chemin d'accés a l'interface d'administration</div>
 							</div>
+							<div class='info'>
+								URL actuelle : <?php	echo $url_actuelle; ?>
+							</div>
 							<div>
-								<label for="url">URL du projet </label><input type="text" id="url" name="url" />/
+								<label for="url">URL du projet </label><input type="text" id="url" name="url" value="<?php echo $url_actuelle;?>"/>/
 								<div  class='info'>L'url qui permet l'accé au repertoire www depuis internet</div>
 							</div>
-
 						</div>
 						<div class="configStep">
 							<h3>Configuration de la base de donnée admin</h3>
@@ -472,10 +499,49 @@ include_once $path.\'fonction/fonction.php\';
 						<div class="configStep">
 							<h3>Finalisation de l'instalation</h3>
 							<div>
+								<?php	
+								  $option_lang='<select name="lang" id="lang">';
+									$array_lang=array('af_ZA'=>'Afrikaans', 'ar_AR'=>'العربية', 'az_AZ'=>'Azərbaycan dili', 'be_BY'=>'Беларуская', 'bg_BG'=>'Български', 'bn_IN'=>'বাংলা', 'bs_BA'=>'Bosanski', 'ca_ES'=>'Català', 'cs_CZ'=>'Čeština', 'cy_GB'=>'Cymraeg', 'da_DK'=>'Dansk', 'de_DE'=>'Deutsch', 'el_GR'=>'Ελληνικά', 'en_GB'=>'English (UK)', 'en_US'=>'English (US)', 'eo_EO'=>'Esperanto', 'es_ES'=>'Español (España)', 'es_LA'=>'Español', 'et_EE'=>'Eesti', 'eu_ES'=>'Euskara', 'fa_IR'=>'فارسی', 'fb_LT'=>'Leet Speak', 'fi_FI'=>'Suomi', 'fo_FO'=>'Føroyskt', 'fr_CA'=>'Français (Canada)', 'fr_FR'=>'Français (France)', 'fy_NL'=>'Frisian', 'ga_IE'=>'Gaeilge', 'gl_ES'=>'Galego', 'he_IL'=>'עברית', 'hi_IN'=>'हिन्दी', 'hr_HR'=>'Hrvatski', 'hu_HU'=>'Magyar', 'hy_AM'=>'Հայերեն', 'id_ID'=>'Bahasa Indonesia', 'is_IS'=>'Íslenska', 'it_IT'=>'Italiano', 'ja_JP'=>'日本語', 'ka_GE'=>'ქართული', 'ko_KR'=>'한국어', 'ku_TR'=>'Kurdî', 'la_VA'=>'lingua latina', 'lt_LT'=>'Lietuvių', 'lv_LV'=>'Latviešu', 'mk_MK'=>'Македонски', 'ml_IN'=>'മലയാളം', 'ms_MY'=>'Bahasa Melayu', 'nb_NO'=>'Norsk (bokmål)', 'ne_NP'=>'नेपाली', 'nl_NL'=>'Nederlands', 'nn_NO'=>'Norsk (nynorsk)', 'pa_IN'=>'ਪੰਜਾਬੀ', 'pl_PL'=>'Polski', 'ps_AF'=>'پښتو', 'pt_BR'=>'Português (Brasil)', 'pt_PT'=>'Português (Portugal)', 'ro_RO'=>'Română', 'ru_RU'=>'Русский', 'sk_SK'=>'Slovenčina', 'sl_SI'=>'Slovenščina', 'sq_AL'=>'Shqip', 'sr_RS'=>'Српски', 'sv_SE'=>'Svenska', 'sw_KE'=>'Kiswahili', 'ta_IN'=>'தமிழ்', 'te_IN'=>'తెలుగు', 'th_TH'=>'ภาษาไทย', 'tl_PH'=>'Filipino', 'tr_TR'=>'Türkçe', 'uk_UA'=>'Українська', 'vi_VN'=>'Tiếng Việt', 'zh_CN'=>'中文(简体)', 'zh_HK'=>'中文(香港)', 'zh_TW'=>'中文(台灣)');									
+									//génération de la liste déroulante									
+									foreach($array_lang as $k => $v){
+										$option_lang.='<option value="'.$k.'"';
+										if($k=='fr_FR'){
+											$option_lang.=' selected="selected"';		
+										}
+										$option_lang.='>'.$v.'</option>';
+									}
+								$option_lang.='</select>';
+								?>						
 								<label for="lang">Langue </label>
-								<select name="lang" id="lang">
-									<option value="fr_FR" selected="selected">français</option>
-								</select>
+									<?php echo $option_lang; ?>							
+							</div>							
+							<div>
+								<?php								
+									//récupération des timezones
+									$timezone_abbreviations = Datetimezone::listAbbreviations(); 	
+									//sélection et stockage des codes timezones						
+									foreach($timezone_abbreviations as $k => $v){
+										foreach($v as $k2 => $v2){
+											if(!empty($v2['timezone_id'])){
+												$array_timezone[$v2['timezone_id']]=$v2['timezone_id'];
+											}
+										}
+									}
+									//tri du tableau de stockage
+									asort($array_timezone);			
+									//génération de la liste déroulante			
+									$option_timezone='<select name="timezone" id="timezone">';
+									foreach($array_timezone as $k =>$v){
+										$option_timezone.='<option value="'.$v.'"';
+										if($v=='Europe/Paris'){
+											$option_timezone.=' selected="selected"';		
+										}
+										$option_timezone.='>'.$v.'</option>';	
+									}										
+								  $option_timezone.='</select>';				
+								?>	
+								<label for="timezone">fuseau horaire </label>
+									<?php echo $option_timezone; ?>									
 							</div>
 							<div>
 								<label for="projet_nom">Nom du projet </label>
@@ -485,13 +551,16 @@ include_once $path.\'fonction/fonction.php\';
 							<input type="submit" value="suivant" />
 						</div>
 					</form>
-				</div>
-				<div style="clear:both"></div>
-			</body>
-		</html>
 		<?php
 		break;
 	case 'admin':
+		?>
+				<title>Installation de Balsa : étape II</title>
+			</head>
+			<body>
+				<div class="site" id="site">
+		<?php
+					
 		/*
 		  modif du chemin de l'admin (rename('../nw/admin','../nw/admin_'.$str))
 		  creation de admin_<str>.php dans /www (incluant le chemin de l'admin)
@@ -510,3 +579,7 @@ include_once $path.\'fonction/fonction.php\';
 		break;
 }
 ?>
+				</div>
+				<div style="clear:both"></div>
+			</body>
+		</html>

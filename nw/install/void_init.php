@@ -1,4 +1,14 @@
 
+
+//inclusion de tous les fichiers fonctions
+$fct_files=scandir($path.'fonction/');
+$nbr_fct=count($fct_files);
+for ($i=2; $i<$nbr_fct; $i++){
+	if(is_file($path.'fonction/'.$fct_files[$i])){
+	  include_once $path.'fonction/'.$fct_files[$i];
+	}
+}
+
 //fake log
 $_SESSION['user_id']='123';
 //initialisation des erreurs
@@ -10,10 +20,16 @@ if(!isset($_SESSION['erreurs']))
 
 $_SESSION['in_time']=microtime();
 
-//inclusion de fonction de base
-include_once $path.'fonction/fonction.php';
+//autoloader des classes POO
+function autoload($classname)
+{    
+	if(file_exists($file=$path.'fonction/'.$classname.'.class.php') OR file_exists ($file=$path.'fonction/'.$classname.'.interface.php')){
+		require_once $file;
+	}
+}    
+spl_autoload_register ('autoload');
+
 //connexion Bdd
-inclure_fonction('bdd.class');
 $bdd=new Bdd;
 if($bdd->connect()!==true)
 {
@@ -23,6 +39,19 @@ if($bdd->connect()!==true)
 
 //reassignation des variable GET
 $get=$_GET;
+
+//reassignation des variable GET
+$post=$_POST;
+
+//mode debug
+if(is_file($path.'debug'))
+{
+	define('debug_mod',true);
+}
+else
+{
+	define('debug_mod',false);
+}
 
 //recupération des parametre client
 if(!isset($_SESSION['param_client']))
@@ -92,7 +121,7 @@ if(!is_logged())
 {
 	//valeur de la page par default
 	$page_de_base='accueil';
-	$get['page']=$page_de_base;
+	$_GET['page']=$page_de_base;
 }
 
 

@@ -1,42 +1,53 @@
-<?php
-/*
- *	Connexion à une base de donnée avec pdo
- *  var :
- *    bdUser : nom d'utilisateur de la base de donnée
- *    bdPassWord : mot de passe
- *    bdDataBase : nom de la base de donnée
- *    bdServer : serveur de la bdd
- *  fonc :
- *    Bdd() : constructeur
- *    connect() : effectue une connexion (retourn true si ok, sinon msg d'erreur)
- *    disconnect() : deconnecte la bdd
- *    query(requete) : lance la requete (retourne un tableau si ok, sinon false)
- *    chgParam(dbName,^host,^user,^pass) : change les parametres de la connexion (var avec ^ optionnelles)
- */
 
-class Bdd
-{
-	private $bdUser;
-	private $bdPassWord;
-	private $bdDataBase;
-	private $bdServer;
-	private $connexion;
-	private $estConnecte;
-
-		/*
-		 * Constructeur
-		 */
-	function Bdd()
+		<?php
+	class Bdd
 	{
-		$this->bdUser = "plop";
-		$this->bdPassWord = "azerty";
-		$this->bdDataBase = "plop";
-		$this->bdServer = "localhost";
-		$this->estConnecte = false;
-		$this->nbreq=0;
-		$this->reqtime=0;
+		private $bdUser;
+		private $bdPassWord;
+		private $bdDataBase;
+		private $bdServer;
+		private $connexion;
+		private $estConnecte;
+
+
+		function Bdd()
+		{
+			$this->bdUser = "root";
+			$this->bdPassWord = "4815162342";
+			$this->bdDataBase = "Balsa";
+			$this->bdServer = "localhost";
+			$this->estConnecte = false;
+			$this->nbreq=0;
+			$this->reqtime=0;
+		}
+		public function creat_db_Balsa($db_name='Balsa',$crea_db=true)
+	{
+		try
+		{
+			if ($this->bdPassWord=="")
+				$this->connexion=new PDO('mysql:host='.$this->bdServer,$this->bdUser);
+			else
+				$this->connexion=new PDO('mysql:host='.$this->bdServer,$this->bdUser,$this->bdPassWord);
+			$this->estConnecte = true;
+			if($crea_db)
+			{			
+				$req='CREATE DATABASE `'.$db_name.'` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;';
+        $res=$this->query2($req);
+
+        $req1=
+        '
+        CREATE TABLE `'.$db_name.'`.`admin` (`id` VARCHAR( 20 ) NOT NULL , `login` VARCHAR( 128 ) NOT NULL ,`mail` VARCHAR( 512 )NOT NULL ,`pass` TEXT NOT NULL) ENGINE = MYISAM ;
+        ';
+        $res=$this->query2($req1);
+      }
+      $this->chgParam($db_name);
+			return true;
+		}
+		catch (PDOException $e)
+		{
+			return "Erreur lors de la connection : ".$e->getMessage();
+		}
 	}
-		
 		/*
 		 * Se connecte à la base de donnée
 		 */
@@ -152,3 +163,4 @@ class Bdd
 	}
 }
 ?>
+

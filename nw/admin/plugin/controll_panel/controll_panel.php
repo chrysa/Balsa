@@ -82,7 +82,7 @@ function list_plugin_install()
 		if($d=='.' or $d=='..')
 		{
 			continue;
-		}
+	}
 		elseif(!is_dir($path.'admin/plugin/'.$d) OR (!is_file($path.'admin/plugin/'.$d.'/installed') AND is_file($path.'admin/plugin/'.$d.'/install.xml')))
 		{
 			continue;
@@ -108,6 +108,7 @@ function list_plugin_add()
 	'
 	<div class="file_list" id="plugin_list">
 	<h2>Liste des plugins additionnels</h2>
+	lors de la désinstallation d\'un plugin toutes les données stockées où les fichiers langues seront conservés
 	';
 	$dir=scandir($path.'admin/plugin/');
 	foreach($dir as $d)
@@ -178,7 +179,7 @@ function list_plugin_delete()
 	$display=
 	'
 	<div class="file_list" id="plugin_list">
-	<h2>Liste des plugins téléchargeable</h2>
+	<h2>Liste des plugins supprimable</h2>
 	';
 	$dir=scandir($path.'admin/plugin/');
 	foreach($dir as $d)
