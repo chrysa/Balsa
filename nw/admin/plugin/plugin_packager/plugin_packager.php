@@ -15,7 +15,7 @@ function files2package()
   $xml_m['img']='<img>';
   
   mkdir($path.'admin/plugin/'.$_GET['p_name']);
-  $plugin_dir=$path.'admin/plugin/'. $_GET['p_name'].'/');
+  $plugin_dir=$path.'admin/plugin/'. $_GET['p_name'].'/';
   mkdir($plugin_dir.'fonction');
   mkdir($plugin_dir.'page');
   mkdir($plugin_dir.'ajax');
@@ -52,8 +52,7 @@ function files2package()
   $xml_m['img']='</img>';
   $xml.=$xml_f.$xml_a.$xml_p.'<media>'.$xml_m['css'].$xml_m['js'].$xml_m['img'] .'</media>';
 
+	
   return file_put_contents($plugin_dir.'install.xml');
-  }
 }
-
 ?>

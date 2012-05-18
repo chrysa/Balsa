@@ -37,5 +37,7 @@
 <lang>
 <file lang_code="locale/language_code" name="file_name"/>
 </lang>
+<www>
+<file name="file_name" type="file_type"/>
+</www>
 </installer>
-

@@ -107,7 +107,7 @@
 		    }
 		  }
 	  }
-		
+	  
     function install_bdd(){
       global $bdd;
       $sql=$this->xml->getElementsByTagName('sql');
@@ -142,6 +142,32 @@
 		  }
 		}
 		
+    function install_www(){
+      global $path_w;
+      $www=$this->xml->getElementsByTagName('www');
+      if($www->length>0){      
+        foreach($www as $www){
+          $file_www=$www->getElementsByTagName('file');
+          foreach ($file_www as $f_w){    
+            copy_r($this->path.'www/'.$f_w->getAttribute('name'),$path_w.$f_w->getAttribute('name'));
+          }
+        }
+      }
+    }
+		
+    function uninstall_www(){
+      global $path_w;
+      $www=$this->xml->getElementsByTagName('www');
+      if($www->length>0){
+        foreach($www as $www){
+          $file_www=$www->getElementsByTagName('file');
+          foreach ($file_www as $f_w){  
+            unlink($path_w.$f_w->getAttribute('name'));
+          }
+        }
+      }
+    }
+	  
 	  function install_flag()
 	  {
 		  global $base_url;
@@ -180,6 +206,7 @@
 		  }
 		  $this->install_data();
 		  copy_r($this->path.'media/img',$path_w.'media/img');
+		  $this->install_www();
 			$this->install_bdd();
 			$this->install_lang();
 		  if($t=='media/js')
@@ -223,6 +250,7 @@
 					inc($path.'admin/plugin/controll_panel/controll_panel.js.php');
 					regen_css();
 				}
+				$this->uninstall_www();
 		  }		
 		  //reste les image a desintaller !!	
 		  $this->uninstall_flag();
