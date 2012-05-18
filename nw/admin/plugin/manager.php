@@ -112,34 +112,47 @@
       global $bdd;
       $sql=$this->xml->getElementsByTagName('sql');
       if($sql->length>0){
-        foreach ($sql->getElementsByTagName('file') as $file_sql){
-          $bdd->query2(file_get_contents($file_sql));
-        }
+				foreach ($sql as $s){
+					$file=$s->getElementsByTagName('file');
+					foreach($file as $f){
+						if($f->getAttribute('name')!=''){
+							$bdd->query2(file_get_contents($f->getAttribute('name')));
+						}
+					}
+				}		
       }
     }
 		
 		function install_lang(){
-		  global $path;
-		  
+			global $path;		  
+			if(!is_file($path.'admin/plugin/chrysa_lang/installed')){
+				$chrysa_lang=0;
+			}else{
+				$chrysa_lang=1;
+			}
+
 			$lang=$this->xml->getElementsByTagName('lang');
 			if($lang->length>0){
-		    if(!is_file($path.'admin/plugin/chrysa_lang/installed')){
-		      $chrysa_lang_install=new plugin_manager('chrysa_lang');
-		      $chrysa_lang_install->instal_all();
-		    }
-			
-			  foreach ($lang as $lang){
-				  $files=$lang->getRElementsByTagName('file');
-				  foreach($files as $file){
-					  if(!is_file($path.'data/'.$file->getRElementsByTagName('lang_code'))){
-						  mkdir($path.'data/'.$file->getRElementsByTagName('lang_code'));
-					  }
-					  copy($this->path.'/'.$file->getRElementsByTagName('lang_code').$file->getRElementsByTagName('name'),$path.'data/'.$file->getRElementsByTagName('lang_code').$file->getRElementsByTagName('name'));
-				  }
-			  }
-			  inc($path.'admin/plugin/chrysa_lang/gen_all_lang.php');
-			  gen_multilingue();
-		  }
+				foreach($lang as $l){
+					$files=$l->getRElementsByTagName('file');
+					foreach($files as $file){
+						if($file->getAttribute('name')!=''){
+							if($chrysa_lang==0){
+								$chrysa_lang_install=new plugin_manager('chrysa_lang');
+								$chrysa_lang_install->install_all();
+								$chrysa_lang=1;
+							}						
+
+							if(!is_file($path.'data/'.$file->getRElementsByTagName('lang_code'))){
+								mkdir($path.'data/'.$file->getRElementsByTagName('lang_code'));
+							}
+							copy($this->path.'/'.$file->getRElementsByTagName('lang_code').$file->getRElementsByTagName('name'),$path.'data/'.$file->getRElementsByTagName('lang_code').$file->getRElementsByTagName('name'));
+							inc($path.'admin/plugin/chrysa_lang/gen_all_lang.php');
+							gen_multilingue();							
+						}							
+					}
+				}
+			}
 		}
 		
     function install_www(){
