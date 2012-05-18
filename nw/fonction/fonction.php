@@ -200,12 +200,12 @@ function compress_dir($dir,$d_path,$dest_file='',$dest_path='',$type='tar.gz')
 	}
 	
 	switch ($type){
-    case 'tar.gz':
-				$c='cd '.$d_path.' && tar cvzf '.$dest_path.$dest_file.'.'.$type.' '.$dir;
-        break;
-    case 'zip':
-				$c='cd '.$d_path.' && zip -r '.$dest_path.$dest_file.'.'.$type.' '.$dir;
-        break;
+	    case 'tar.gz':
+					$c='cd '.$d_path.' && tar cvzf '.$dest_path.$dest_file.'.'.$type.' '.$dir;
+	        break;
+	    case 'zip':
+					$c='cd '.$d_path.' && zip -r '.$dest_path.$dest_file.'.'.$type.' '.$dir;
+	        break;
 	}
 	
 #	echo $c;
@@ -215,13 +215,14 @@ function compress_dir($dir,$d_path,$dest_file='',$dest_path='',$type='tar.gz')
 //unpack a tar.gz file xith a specified directory
 function uncompress_dir($tgz,$u_path,$type='tar.gz')
 {		
-		switch ($type){
-    case 'tar.gz':
-				$c='cd '.$u_path.' && tar xvzf '.$tgz.'';
-        break;
-    case 'zip':
-				$c='cd '.$u_path.' && unzip '.$tgz.'';
-        break;
+	switch ($type){
+    	case 'tar.gz':
+			$c='cd '.$u_path.' && tar xvzf '.$tgz.'';
+        	break;
+    	case 'zip':
+			$c='cd '.$u_path.' && unzip '.$tgz.'';
+        	break;
+    }
 }
 
 //include a php or a file text and treat the error if needed
