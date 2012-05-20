@@ -48,29 +48,32 @@
 	  function uninstall($quoi,$node)
 	  {
 		  global $path;
-		  if($node->getAttribute('file')!='all')
+		  if($node->getAttribute('file')!='')
 		  {
-			  $f_list=$node->childNodes;
-			  foreach($f_list as $f)
-			  {
-				  unlink($path.$quoi.'/'.$f->getAttribute('name'));
-			  }
-		  }
-		  else
-		  {
-			  $all=scandir($this->path.$quoi);
-			  foreach($all as $a_fn)
-			  {
-				  if($a_fn=='.' or $a_fn=='..')
-				  {
-					  continue;
-				  }
-				  else
-				  {
-					  unlink($path.$quoi.'/'.$a_fn);
-				  }
-			  }
-		  }
+				if($node->getAttribute('file')!='all')
+				{
+					$f_list=$node->childNodes;
+					foreach($f_list as $f)
+					{
+						unlink($path.$quoi.'/'.$f->getAttribute('name'));
+					}
+				}
+				else
+				{
+					$all=scandir($this->path.$quoi);
+					foreach($all as $a_fn)
+					{
+						if($a_fn=='.' or $a_fn=='..')
+						{
+							continue;
+						}
+						else
+						{
+							unlink($path.$quoi.'/'.$a_fn);
+						}
+					}
+				}
+			}
 	  }
 
 	  function install_data()
@@ -134,7 +137,7 @@
 			$lang=$this->xml->getElementsByTagName('lang');
 			if($lang->length>0){
 				foreach($lang as $l){
-					$files=$l->getRElementsByTagName('file');
+					$files=$l->getElementsByTagName('file');
 					foreach($files as $file){
 						if($file->getAttribute('name')!=''){
 							if($chrysa_lang==0){

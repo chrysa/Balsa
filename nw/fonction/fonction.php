@@ -200,12 +200,12 @@ function compress_dir($dir,$d_path,$dest_file='',$dest_path='',$type='tar.gz')
 	}
 	
 	switch ($type){
-	    case 'tar.gz':
-					$c='cd '.$d_path.' && tar cvzf '.$dest_path.$dest_file.'.'.$type.' '.$dir;
-	        break;
-	    case 'zip':
-					$c='cd '.$d_path.' && zip -r '.$dest_path.$dest_file.'.'.$type.' '.$dir;
-	        break;
+    case 'tar.gz':
+				$c='cd '.$d_path.' && tar cvzf '.$dest_path.$dest_file.'.'.$type.' '.$dir;
+        break;
+    case 'zip':
+				$c='cd '.$d_path.' && zip -r '.$dest_path.$dest_file.'.'.$type.' '.$dir;
+        break;
 	}
 	
 #	echo $c;
@@ -215,14 +215,14 @@ function compress_dir($dir,$d_path,$dest_file='',$dest_path='',$type='tar.gz')
 //unpack a tar.gz file xith a specified directory
 function uncompress_dir($tgz,$u_path,$type='tar.gz')
 {		
-	switch ($type){
-    	case 'tar.gz':
-			$c='cd '.$u_path.' && tar xvzf '.$tgz.'';
-        	break;
-    	case 'zip':
-			$c='cd '.$u_path.' && unzip '.$tgz.'';
-        	break;
-    }
+		switch ($type){
+			case 'tar.gz':
+					$c='cd '.$u_path.' && tar xvzf '.$tgz.'';
+					break;
+			case 'zip':
+					$c='cd '.$u_path.' && unzip '.$tgz.'';
+					break;
+		}
 }
 
 //include a php or a file text and treat the error if needed
@@ -264,7 +264,7 @@ function inc($page,$php=true,$once=true)
 function inclure_fonction($page)
 {
 	global $path;
-	return inc($path.'/fonction/'.$page.'.php');
+	return inc($path.'fonction/'.$page.'.php');
 }
 
 //inculde the 'page' page contained in nw/page/ with the name contained in $page
@@ -280,7 +280,7 @@ function inclure_page($page,$once=false)
 	{
 		report_erreur2('0003',__FILE__,__LINE__,'inclure_page '.$page.' is not registered');
 	}
-	return inc($path.'/page/'.$page.'.php',true,$once);
+	return inc($path.'page/'.$page.'.php',true,$once);
 }
 
 //inculde the ajx page contained in nw/ajax/ with the name contained in $page
@@ -306,7 +306,7 @@ function inclure_ajax($page,$ext='php')
 		$b=true;
 	}
 	
-	$ajax=inc($path.'/ajax/'.$page.'.'.$ext,$b);
+	$ajax=inc($path.'ajax/'.$page.'.'.$ext,$b);
 	return $ajax;
 }
 
@@ -314,7 +314,7 @@ function inclure_ajax($page,$ext='php')
 function inclure_conf($page)
 {
 	global $path;
-	$ajax=inc($path.'/data/conf/'.$page.'.conf.php');
+	$ajax=inc($path.'data/conf/'.$page.'.conf.php');
 	return $ajax;
 }
 
@@ -355,7 +355,7 @@ function inclure_js($min=false,$php=false)
 		}
 	}
 	
-	return '<script type="text/javascript" src="'.$base_url.'/media/js/js.php"></script>';
+	return '<script type="text/javascript" src="'.$base_url.'media/js/js.php"></script>';
 	
 }
 
@@ -397,7 +397,7 @@ function inclure_stat($page,$ext='php')
 	{
 		$b=true;
 	}
-	$ajax=inc($path.'/ajax/'.$page.'.'.$ext,$b);
+	$ajax=inc($path.'ajax/'.$page.'.'.$ext,$b);
 	return $ajax;
 }
 
@@ -650,7 +650,7 @@ class activity_logger
 			$t-=604800;
 			$debut=date('Y_m_d',$t);
 		}
-		$dir=scandir($path.'/data/log/');
+		$dir=scandir($path.'data/log/');
 		$merged=array();
 		foreach($dir as $d)
 		{
@@ -660,7 +660,7 @@ class activity_logger
 			}
 			if($b===true)
 			{
-				array_push($merged,$path.'/data/log/'.$d);
+				array_push($merged,$path.'data/log/'.$d);
 			}
 			if($d==$fin)
 			{
@@ -669,7 +669,7 @@ class activity_logger
 			}
 		}
 		$logged=$inclure->text_pages($merged,'<!-- new day -->');
-		$log=fopen($path.'/data/log/'.$debut.'__'.$fin);
+		$log=fopen($path.'data/log/'.$debut.'__'.$fin);
 		fput($logged,$log);
 		fclose($log);
 		$this->log=$logged;
@@ -905,13 +905,13 @@ function copy_r( $path, $dest )
                 if( $file == "." || $file == ".." )
                     continue;
                 // go on
-                if( is_dir( $path.'/'.$file ) )
+                if( is_dir( $path.''.$file ) )
                 {
-                    copy_r( $path.'/'.$file, $dest.'/'.$file );
+                    copy_r( $path.''.$file, $dest.'/'.$file );
                 }
                 else
                 {
-                    copy( $path.'/'.$file, $dest.'/'.$file );
+                    copy( $path.''.$file, $dest.'/'.$file );
                 }
             }
         }

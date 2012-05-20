@@ -200,8 +200,17 @@ ajout des liens de desintalation des plugins installer
 	/nw/admin/plugin/void_install.xml
 	  ajout du noeud WWW pour la mise en place de fichier dans le dossier www
 		  
-  	/nw/amdim/plugins/manager.php		  
+ 	/nw/amdim/plugins/manager.php		  
 	  ajout des fonctions install_www et uninstall_www pour gérer les fichiers du dossier www	  
 		  
 	a tester
 		la gestion des plugins		  
+
+0.5.0.1c
+	ajout du plugin de gestion de .htaccess
+	
+	/nw/amdim/plugins/manager.php		  
+		débug 
+
+	/nw/fonction/fonction.php
+		suppression de tous les doubles slashs dus à la présence du slash a la fin du path, du path_w et de l'url de base
