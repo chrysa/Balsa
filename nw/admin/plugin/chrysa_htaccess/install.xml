@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer>
+<fonction file="">
+<libs>
+<lib name=""/>
+</libs>
+<file name="" type=""/>
+</fonction>
+<page file="">
+<file name="" type=""/>
+</page>
+<hook file="">
+<file name="" type=""/>
+</hook>
+<ajax file="">
+<file name="" type=""/>
+</ajax>
+<media>
+<css>
+<file name="" type=""/>
+</css>
+<js>
+<file name="" type=""/>
+</js>
+<img>
+<file name="" type=""/>
+</img>
+</media>
+<data>
+<folder name="" parent="" />
+</data>
+<sql>
+<file name="">
+<table name=""/>
+</file>	
+</sql>
+<lang>
+<file lang_code="" name=""/>
+</lang>
+<www>
+<file name=".htaccess" type=""/>
+</www>
+</installer>
