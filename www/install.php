@@ -240,8 +240,8 @@ date_default_timezone_set(\''.$_POST['timezone'].'\');
 //inclusion de tous les fichiers fonctions
 $fct_files=scandir($path.\'fonction/\');
 $nbr_fct=count($fct_files);
-for ($i=2; $i<$nbr_fct; $i++){
-	if(is_file($path.\'fonction/\'.$fct_files[$i])){
+for ($i=2; $i<$nbr_fct; $i++){	
+	if(is_file($path.\'fonction/\'.$fct_files[$i]) AND substr($fct_files[$i],-10)!=\'.class.php\'){
 	  include_once $path.\'fonction/\'.$fct_files[$i];
 	}
 }
@@ -249,11 +249,15 @@ for ($i=2; $i<$nbr_fct; $i++){
 //autoloader des classes POO
 function autoload($classname)
 {    
-	if(file_exists($file=$path.\'fonction/\'.$classname.\'.class.php\') OR file_exists ($file=$path.\'fonction/\'.$classname.\'.interface.php\')){
-		require_once $file;
+	global $path;
+	if(is_file($path.\'fonction/\'.$classname.\'.class.php\')){
+		require_once $path.\'fonction/\'.$classname.\'.class.php\';
+	}elseif(is_file($path.\'fonction/\'.$classname.\'.interface.php\')){
+		require_once $path.\'fonction/\'.$classname.\'.interface.php\';
 	}
 }    
 spl_autoload_register (\'autoload\');
+
 ';
 			if ($_POST['db_'] == "oui") {
 				$init_str.='//définition des logs de la DB principale
