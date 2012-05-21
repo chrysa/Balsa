@@ -109,42 +109,10 @@
 			}
 		}
 
-		function bdd_create($bdd_user, $bdd_host, $bdd_pass, $bdd_name, $bdd_use, $bdd_cre) {
+		function bdd_create($bdd_name, $bdd_use, $bdd_cre) {
 			if ($bdd_use == 'oui') {
 				global $bdd, $path, $path_w;
-				if (is_file($path . 'fonction/bdd.class.php')) {
-					unlink($path . 'fonction/bdd.class.php');
-				}
-				$bdd_class_str =
-						'
-		<?php
-	class Bdd
-	{
-		private $bdUser;
-		private $bdPassWord;
-		private $bdDataBase;
-		private $bdServer;
-		private $connexion;
-		private $estConnecte;
-
-
-		function Bdd()
-		{
-			$this->bdUser = "' . $bdd_user . '";
-			$this->bdPassWord = "' . $bdd_pass . '";
-			$this->bdDataBase = "' . $bdd_name . '";
-			$this->bdServer = "' . $bdd_host . '";
-			$this->estConnecte = false;
-			$this->nbreq=0;
-			$this->reqtime=0;
-		}
-		';
-				$bdd_class_str.=file_get_contents($path . 'install/void_bdd.class.php');
-				if (file_put_contents($path . 'fonction/bdd.class.php', $bdd_class_str)) {
-					include_once $path . 'fonction/fonction.php';
-					inclure_fonction('bdd.class');
 					if ($bdd_cre == '1') {
-						$bdd = new Bdd;
 						if ($bdd->creat_db_Balsa($bdd_name)) {
 							return true;
 						} else {
@@ -160,9 +128,6 @@
 					echo $erreur;
 					return false;
 				}
-			} else {
-				return true;
-			}
 		}
 
 		function create_admin($login, $mail, $pass, $pass2) {
@@ -248,8 +213,8 @@ include_once  \'' . $path . 'init.php\';
 			}
 		}
 
-		function creat_init_php() {
-			global $path, $path_w, $base_url;
+		function creat_init_php($db_user, $db_host, $db_pass, $db_name) {
+			global $bdd,$path, $path_w, $base_url;
 
 			if (is_file($path . 'init.php')) {
 				unlink($path . 'init.php');
@@ -271,21 +236,43 @@ $langage=\'' . $_POST['lang'] . '.utf8\';
 
 //définition de la timezone
 date_default_timezone_set(\''.$_POST['timezone'].'\');
-';
-			if ($_POST['bdd_'] == "oui") {
-				$int_str.=
-						'//connexion Bdd
-		inclure_fonction(\'bdd.class\');
-		$bdd=new Bdd;
-		if($bdd->connect()!==true)
-		{
-			$_SESSION[\'erreur\'][$_SESSION[\'count_erreurs\']]=\'sql_connexion bdd\';
-			$_SESSION[\'count_erreurs\']++;
-		}';
-			}
 
+//inclusion de tous les fichiers fonctions
+$fct_files=scandir($path.\'fonction/\');
+$nbr_fct=count($fct_files);
+for ($i=2; $i<$nbr_fct; $i++){
+	if(is_file($path.\'fonction/\'.$fct_files[$i])){
+	  include_once $path.\'fonction/\'.$fct_files[$i];
+	}
+}
+
+//autoloader des classes POO
+function autoload($classname)
+{    
+	if(file_exists($file=$path.\'fonction/\'.$classname.\'.class.php\') OR file_exists ($file=$path.\'fonction/\'.$classname.\'.interface.php\')){
+		require_once $file;
+	}
+}    
+spl_autoload_register (\'autoload\');
+';
+			if ($_POST['db_'] == "oui") {
+				$init_str.='//définition des logs de la DB principale
+$user_db="'.$db_user.'";
+$mdp_db="'.$db_pass.'";
+$db_name="'.$db_name.'";
+$host_db="'.$db_host.'";
+			
+//connexion Bdd
+$bdd=new bdd($user_db,$mdp_db,$db_name,$host_db);
+if($bdd->connect()!==true)
+{
+	$_SESSION[\'erreur\'][$_SESSION[\'count_erreurs\']]=\'sql_connexion bdd\';
+  $_SESSION[\'count_erreurs\']++;
+}';  
+			}
 			$init_str.=file_get_contents($path . 'install/void_init.php');
 			if (file_put_contents($path . 'init.php', $init_str)) {
+        include_once($path.'init.php');
 				return true;
 			} else {
 				$erreur.='<div>creation du fichier nw/init.php</div>';
@@ -347,10 +334,12 @@ date_default_timezone_set(\''.$_POST['timezone'].'\');
 			global $path, $path_w;
 			echo 'Deplacement du dossier nw';
 			if (move_nw($path, $path_w, $_POST['admin_path'])) {
+									echo ' ---> ok <br/>creation du fichier init';
+									if (creat_init_php($_POST['db_user'], $_POST['db_host'], $_POST['db_pass'],$_POST['db_name'])) {
 				if ($_POST['db_cre'] == '1') {
 					echo ' ---> ok<br/>creation de la base de donnée';
 				}
-				if (bdd_create($_POST['db_user'], $_POST['db_host'], $_POST['db_pass'], $_POST['db_name'], $_POST['db_'], $_POST['db_cre'])) {
+				if (bdd_create($_POST['db_name'], $_POST['db_'], $_POST['db_cre'])) {
 					echo ' ---> ok <br/>creation du fichier admin';
 					if (create_admin($_POST['admin_login'], $_POST['admin_mail'], $_POST['admin_pass'], $_POST['admin_pass_c'])) {
 						echo ' ---> ok <br/>creation du fichier mail';
@@ -359,8 +348,6 @@ date_default_timezone_set(\''.$_POST['timezone'].'\');
 							if (create_index()) {
 								echo ' ---> ok <br/>creation du fichier goulot';
 								if (create_goulot()) {
-									echo ' ---> ok <br/>creation du fichier init';
-									if (creat_init_php()) {
 										echo' ---> ok <br/>creation du fichier js';
 										if (create_js()) {
 											echo' ---> ok <br/>suppression du dossier install';

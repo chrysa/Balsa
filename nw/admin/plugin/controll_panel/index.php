@@ -13,7 +13,7 @@ switch($action)
 		echo list_css();
 		?>
 		<script type="text/javascript" src="<?php echo $base_url.'admin.php?ajax_admin=1&module=controll_panel&action=js';?>"></script>
-		<?php;		
+		<?php
 		break;
 	case'plugin':
 		include_once($path.'admin/plugin/controll_panel/gestion_plugin.php');

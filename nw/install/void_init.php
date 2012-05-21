@@ -1,14 +1,5 @@
 
 
-//inclusion de tous les fichiers fonctions
-$fct_files=scandir($path.'fonction/');
-$nbr_fct=count($fct_files);
-for ($i=2; $i<$nbr_fct; $i++){
-	if(is_file($path.'fonction/'.$fct_files[$i])){
-	  include_once $path.'fonction/'.$fct_files[$i];
-	}
-}
-
 //fake log
 $_SESSION['user_id']='123';
 //initialisation des erreurs
@@ -19,23 +10,6 @@ if(!isset($_SESSION['erreurs']))
 }
 
 $_SESSION['in_time']=microtime();
-
-//autoloader des classes POO
-function autoload($classname)
-{    
-	if(file_exists($file=$path.'fonction/'.$classname.'.class.php') OR file_exists ($file=$path.'fonction/'.$classname.'.interface.php')){
-		require_once $file;
-	}
-}    
-spl_autoload_register ('autoload');
-
-//connexion Bdd
-$bdd=new Bdd;
-if($bdd->connect()!==true)
-{
-	$_SESSION['erreur'][$_SESSION['count_erreurs']]='sql_connexion bdd';
-	$_SESSION['count_erreurs']++;
-}
 
 //reassignation des variable GET
 $get=$_GET;
@@ -123,7 +97,6 @@ if(!is_logged())
 	$page_de_base='accueil';
 	$_GET['page']=$page_de_base;
 }
-
 
 hook('after_init',array('p_name'=>'chrysa_lang'));
 $_HOOK['display'];

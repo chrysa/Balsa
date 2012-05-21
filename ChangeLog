@@ -214,3 +214,18 @@ ajout des liens de desintalation des plugins installer
 
 	/nw/fonction/fonction.php
 		suppression de tous les doubles slashs dus à la présence du slash a la fin du path, du path_w et de l'url de base
+
+0.5.0.1d
+	ajout de la possibilité d'utiliser plusieurs base de données
+		/www/install.php
+			refonte des fonctions create_bdd() et create_init() avec modification de l'ordre d'exécution des fonctions d'installation
+			
+		/nw/fonction/bdd.class.php
+			initialisation des logs depuis le __construct()
+			modification du nom de la classe passage de "class Bdd" à "class bdd" pour le rendre compatible avec l'autoloader
+
+		/nw/install/void_init.php
+			modifification de l'init de DB
+
+		/nw/install/void_bdd.class.php
+			supperssion du fichier

@@ -48,32 +48,29 @@
 	  function uninstall($quoi,$node)
 	  {
 		  global $path;
-		  if($node->getAttribute('file')!='')
+		  if($node->getAttribute('file')!='all')
 		  {
-				if($node->getAttribute('file')!='all')
-				{
-					$f_list=$node->childNodes;
-					foreach($f_list as $f)
-					{
-						unlink($path.$quoi.'/'.$f->getAttribute('name'));
-					}
-				}
-				else
-				{
-					$all=scandir($this->path.$quoi);
-					foreach($all as $a_fn)
-					{
-						if($a_fn=='.' or $a_fn=='..')
-						{
-							continue;
-						}
-						else
-						{
-							unlink($path.$quoi.'/'.$a_fn);
-						}
-					}
-				}
-			}
+			  $f_list=$node->childNodes;
+			  foreach($f_list as $f)
+			  {
+				  unlink($path.$quoi.'/'.$f->getAttribute('name'));
+			  }
+		  }
+		  else
+		  {
+			  $all=scandir($this->path.$quoi);
+			  foreach($all as $a_fn)
+			  {
+				  if($a_fn=='.' or $a_fn=='..')
+				  {
+					  continue;
+				  }
+				  else
+				  {
+					  unlink($path.$quoi.'/'.$a_fn);
+				  }
+			  }
+		  }
 	  }
 
 	  function install_data()
@@ -110,80 +107,41 @@
 		    }
 		  }
 	  }
-	  
+		
     function install_bdd(){
       global $bdd;
       $sql=$this->xml->getElementsByTagName('sql');
       if($sql->length>0){
-				foreach ($sql as $s){
-					$file=$s->getElementsByTagName('file');
-					foreach($file as $f){
-						if($f->getAttribute('name')!=''){
-							$bdd->query2(file_get_contents($f->getAttribute('name')));
-						}
-					}
-				}		
+        foreach ($sql->getElementsByTagName('file') as $file_sql){
+          $bdd->query2(file_get_contents($file_sql));
+        }
       }
     }
 		
 		function install_lang(){
-			global $path;		  
-			if(!is_file($path.'admin/plugin/chrysa_lang/installed')){
-				$chrysa_lang=0;
-			}else{
-				$chrysa_lang=1;
-			}
-
+		  global $path;
+		  
 			$lang=$this->xml->getElementsByTagName('lang');
 			if($lang->length>0){
-				foreach($lang as $l){
-					$files=$l->getElementsByTagName('file');
-					foreach($files as $file){
-						if($file->getAttribute('name')!=''){
-							if($chrysa_lang==0){
-								$chrysa_lang_install=new plugin_manager('chrysa_lang');
-								$chrysa_lang_install->install_all();
-								$chrysa_lang=1;
-							}						
-
-							if(!is_file($path.'data/'.$file->getRElementsByTagName('lang_code'))){
-								mkdir($path.'data/'.$file->getRElementsByTagName('lang_code'));
-							}
-							copy($this->path.'/'.$file->getRElementsByTagName('lang_code').$file->getRElementsByTagName('name'),$path.'data/'.$file->getRElementsByTagName('lang_code').$file->getRElementsByTagName('name'));
-							inc($path.'admin/plugin/chrysa_lang/gen_all_lang.php');
-							gen_multilingue();							
-						}							
-					}
-				}
-			}
+		    if(!is_file($path.'admin/plugin/chrysa_lang/installed')){
+		      $chrysa_lang_install=new plugin_manager('chrysa_lang');
+		      $chrysa_lang_install->instal_all();
+		    }
+			
+			  foreach ($lang as $lang){
+				  $files=$lang->getRElementsByTagName('file');
+				  foreach($files as $file){
+					  if(!is_file($path.'data/'.$file->getRElementsByTagName('lang_code'))){
+						  mkdir($path.'data/'.$file->getRElementsByTagName('lang_code'));
+					  }
+					  copy($this->path.'/'.$file->getRElementsByTagName('lang_code').$file->getRElementsByTagName('name'),$path.'data/'.$file->getRElementsByTagName('lang_code').$file->getRElementsByTagName('name'));
+				  }
+			  }
+			  inc($path.'admin/plugin/chrysa_lang/gen_all_lang.php');
+			  gen_multilingue();
+		  }
 		}
 		
-    function install_www(){
-      global $path_w;
-      $www=$this->xml->getElementsByTagName('www');
-      if($www->length>0){      
-        foreach($www as $www){
-          $file_www=$www->getElementsByTagName('file');
-          foreach ($file_www as $f_w){    
-            copy_r($this->path.'www/'.$f_w->getAttribute('name'),$path_w.$f_w->getAttribute('name'));
-          }
-        }
-      }
-    }
-		
-    function uninstall_www(){
-      global $path_w;
-      $www=$this->xml->getElementsByTagName('www');
-      if($www->length>0){
-        foreach($www as $www){
-          $file_www=$www->getElementsByTagName('file');
-          foreach ($file_www as $f_w){  
-            unlink($path_w.$f_w->getAttribute('name'));
-          }
-        }
-      }
-    }
-	  
 	  function install_flag()
 	  {
 		  global $base_url;
@@ -222,7 +180,6 @@
 		  }
 		  $this->install_data();
 		  copy_r($this->path.'media/img',$path_w.'media/img');
-		  $this->install_www();
 			$this->install_bdd();
 			$this->install_lang();
 		  if($t=='media/js')
@@ -266,7 +223,6 @@
 					inc($path.'admin/plugin/controll_panel/controll_panel.js.php');
 					regen_css();
 				}
-				$this->uninstall_www();
 		  }		
 		  //reste les image a desintaller !!	
 		  $this->uninstall_flag();
