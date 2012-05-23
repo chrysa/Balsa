@@ -29,13 +29,16 @@
 <data>
 <folder name="data_folder_name" parent="path_of_the_parent(void if parent is nw/data/)" />
 </data>
-<sql>
+<sql count="number_of_files">
 <file name="file_name">
 <table name="name_of_table"/>
 </file>	
 </sql>
-<lang>
+<lang count="number_of_files">
 <file lang_code="locale/language_code" name="file_name"/>
 </lang>
+<www>
+<file name="" type=""/>
+</www>
 </installer>
 

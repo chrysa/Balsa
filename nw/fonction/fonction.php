@@ -37,12 +37,13 @@ function is_logged()
 
 function debug()
 {
-	global$debug_mod;
+	global $debug_mod;
 	return $debug_mod;
 }
+
 function trace_mod()
 {
-	global$trace_mod;
+	global $trace_mod;
 	return $trace_mod;
 }
 
@@ -901,17 +902,17 @@ function copy_r( $path, $dest )
         if( sizeof($objects) > 0 )
         {
             foreach( $objects as $file )
-            {
+            {     
                 if( $file == "." || $file == ".." )
                     continue;
                 // go on
-                if( is_dir( $path.''.$file ) )
+                if( is_dir( $path.$file ) )
                 {
-                    copy_r( $path.''.$file, $dest.'/'.$file );
+                    copy_r( $path.'/'.$file, $dest.'/'.$file );
                 }
                 else
                 {
-                    copy( $path.''.$file, $dest.'/'.$file );
+                    copy( $path.'/'.$file, $dest.'/'.$file );
                 }
             }
         }
@@ -1271,4 +1272,43 @@ function year_selector($id='',$today=true,$start='',$end='')
 	';
 	return $display;
 }
+/**
+ * @fn convertion_temps()
+ * @brief fonction de conversion d'un nombre de secondes
+ * @param numeric $duree nombre de secondes a convertir
+ * @var numeric $i_restantes nombre de minutes
+ * @var numeric $H_restantes nombre d'heure
+ * @var numeric $d_restants nombre de jours
+ * @var numeric $s_restants nombre de secondes arrondi
+ * @var numeric $i_restants nombre de minutes arrondi
+ * @var numeric $H_restants nombre d'heure arrondi
+ * @var numeric $d_restants nombre de jour arrondi
+ * @return string $duree conversion d'une durée de secondes au format J/H/min/sec
+ */
+	function convertion_temps($duree){
+		//============ CONVERSIONS
+		$i_restantes = $duree / 60;
+		$H_restantes = $i_restantes / 60;
+		$d_restants = $H_restantes / 24;
+
+		$s_restants = floor($duree % 60); // Secondes restantes
+		$i_restants = floor($i_restantes % 60); // Minutes restantes
+		$H_restants = floor($H_restantes % 24); // Heures restantes
+		$d_restants = floor($d_restants); // Jours restants
+		//==================
+		$duree='';
+		if($d_restants>0){
+				$duree.=$d_restants .' J ';
+		}
+		if($H_restants>0){
+				$duree.=$H_restants .' H ';
+		}
+		if($i_restants>0){
+				$duree.=$i_restants .' min ';
+		}
+		if($s_restants>0){
+				$duree.=$s_restants .' sec';
+		}
+		return $duree;
+	}
 ?>

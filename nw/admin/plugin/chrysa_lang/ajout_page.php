@@ -1,16 +1,27 @@
 <?php
+/**
+ * @file ajout_page.php
+ * @auteur chrysa
+ * @version 1
+ * @date 21 mai 2012
+ * @category chrysa_lang
+ * @global string $path chemin du dossier nw/
+ * @global string $base_url url du site
+ * @brief page d'ajout d'une nouvelle page de traduction du site
+ */
 	global $path,$base_url;
-	
+
 	if(isset($_POST['ajouter_page'])){
 		//on divise par 2 le nombre de posts pour trouver le nombre de couple et on lui retranche 2 a cause du submit et du hidden
 		for($i=1, $i_max=(count($_POST)-2)/2; $i<=$i_max; $i++){
+			//génération du contenu du fichier .po
 			$str_po.='msgid "'.$_POST['msgid_'.$i].'"';
 			$str_po.="\n";
 			$str_po.='msgstr "'.$_POST['msgstr_'.$i].'" ';	
 			if($i<$i_max){
 				$str_po.="\n\n";
 			}
-		}				
+		}	
 		if(file_put_contents($path.'data/locale/'.$_GET['lang'].'/LC_MESSAGES/'.$_POST['nom_page'].'.po', $str_po)){
 			header('location: '.$base_url.'admin.php?page_admin=1&module=chrysa_lang&action=gestion_lang&lang='.$_GET['lang']);
 		}

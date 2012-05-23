@@ -1,5 +1,17 @@
 <?php
-global $path,$base_url,$array_lang,$langage;
+/**
+ * @file ajout_lang.php
+ * @auteur chrysa
+ * @version 1
+ * @date 21 mai 2012
+ * @category chrysa_lang
+ * @global string $path chemin du dossier nw/
+ * @global string $base_url url du site
+ * @global array $array_lang array contenant les différentes langues prises en charges
+ * @var array $array_lang_exist array contenant toutes les langues dans lequel le site est traduit
+ * @brief page d'ajout d'une nouvelle langue
+ */
+global $path,$base_url,$array_lang;
 //récupération des noms des fichiers langue
 $array_lang_exist=scandir($path.'data/locale/');
 //test de l'action d'ajout de langue
@@ -7,7 +19,7 @@ if(isset($_POST['ajouter'])){
 	//création des nouveau dossier pour la langue
 	mkdir($path.'data/locale/'.$_POST['lang']);
 	mkdir($path.'data/locale/'.$_POST['lang'].'/LC_MESSAGES');
-	//si il existe d'aj une langue on copie son contenu dans le nouveau dossier pour n'avoir plus qu'a traduire
+	//si il existe déja une langue on copie son contenu dans le nouveau dossier pour n'avoir plus qu'a traduire
 	if(count($array_lang_exist)>2){
 		$page=scandir($path.'data/locale/'.$array_lang_exist[2].'/LC_MESSAGES');
 		array_shift($page); 

@@ -1,36 +1,28 @@
 <?php
-	global $post,$get,$path,$base_url,$exclu;
-	//test de l'esxistence d'un nom de fichier en paramètre pour une suppression unique
-	if(isset($get['name']) AND !empty($get['name'])){
-		//suppression du fichier cache
-		if(unlink($path.'cache/'.$get['name'].'.cache')){		
-			//redirection vers la page de visualisation des fichiers cache pour supprimer de l'url du parametre nom
-			header('location: '.$base_url.'admin.php?module=cache&action=voir_cache');
-		}
-	}
-	//test d'existence de l'envoi d'un formulaire	
-	if(isset($post['supprimer'])){
-		//calcul du nombre de secondes postées
-		$temps=$post['seconde']+($post['minute']*60)+($post['heure']*3600)+($post['jour']*86400);		
-		//définition tu répertoire d'install a vider et supprimer
-		$repertoire_traite=$path.'cache';
-		//ouverture du dossier d'install
-		$repertoire=opendir($repertoire_traite);
-		//parcours du dossier avec lecture de chaques fichiers
-		while (false!==($fichier=readdir($repertoire)))
-		{
-			//définition du fichier a effacer
-			$chemin=$repertoire_traite.'/'.$fichier;
-			//on test si c'est bien un fichier valide
-			if(!in_array($fichier, $exclu) AND !is_dir($fichier) AND (time()-filemtime($chemin))>$temps-1){
-				//suppression du fichier
-				unlink($chemin);
-			}
-		}
-		//fermeture du dossier
-		closedir($repertoire);  		
-	}
-
+/**
+ * @file voir_cache.php
+ * @auteur chrysa
+ * @version 1
+ * @date 21 mai 2012
+ * @category chrysa_cache
+ * @see convertion_temps
+ * @global string $path chemin du dossier nw/
+ * @global string $base_url url du site
+ * @global array $get réattribution de $_GET
+ * @global array $post réatribution de $_POST
+ * @var array $dir array contenant les caractéristiques du fichier
+ * @var numeric $val valeur des listes déroulantes
+ * @var mixed $liste_j miste déroulante des jours
+ * @var mixed $liste_h liste déroulante des heureq
+ * @var mixed $liste_m_s liste déroulantes de minutes et liste déroulantes des secondes
+ * @var mixed $content contenu de la page a afficher
+ * @var string $d alias de $dir représentant un fichier
+ * @var mixed $d_aff nom du fichier à afficher
+ * @var numeric $age age du fichier
+ * @var mixed $taille poids du fichier
+ * @brief page de gestion des fichiers de cache
+ */
+	global $post,$get,$path,$base_url;
 	//listing des fichiers de cache
 	$dir=scandir($path.'data/cache/');
   for($i=0, $i_max=count($dir); $i<$i_max; $i++){
@@ -48,7 +40,7 @@
 		  }
 		  $liste_j.='<option value='.$val.'>'.$val.'</option>';
 	  }
-	  //génération des option de la liste de nombre d'e jours'heures
+	  //génération des option de la liste de nombre d'heures
 	  for($i=0, $i_max=24; $i<=$i_max; $i++){
 		  if($i<10){
 			  $val='0'.$i;
@@ -66,9 +58,9 @@
 		  }
 		  $liste_m_s.='<option value='.$val.'>'.$val.'</option>';
 	  }
-  //formulaire de sélection des fichiers a supprimer	
+	  //formulaire de sélection des fichiers a supprimer	
     $content='
-    <form method="POST" action="'.$base_url.'admin.php?ajax_admin=1&module=chrysa_cache&action=voir_cache">
+    <form method="POST" action="'.$base_url.'admin.php?ajax_admin=1&module=chrysa_cache&action=suppr_tranch_cache">
       supprimer les fichiers de cache qui ont plus de : 
       <select name="jour">'.$liste_j.'</select> jours 
       <select name="heure">'.$liste_h.'</select> heures 
@@ -83,7 +75,7 @@
 		    $d_aff=str_replace('_',' ',$d_aff);
 			  $age=convertion_temps(time()-filemtime($path.'cache/'.$d));
 			  $taille=filesize($path.'data/cache/'.$d);
-			  //conertion du poids
+			  //convertion du poids du fichier pour l'affichage
 			  if($taille>1048576){
 				  $taille=($taille/1048576);
 				  if(is_float($taille)){
@@ -101,12 +93,12 @@
 					  $taille=$taille.' octets';					
 				  }	
 			  }			
-			  $content.='<tr><td>'.$d_aff.'</td><td>'.$age.'</td><td>'.$taille.'</td><td><a href="'.$base_url.'ajax_admin=1&module=chrysa_cache&action=voir_cache&name='.$d_aff.'">supprimer</a></td></tr>';
+			  $content.='<tr><td>'.$d_aff.'</td><td>'.$age.'</td><td>'.$taille.'</td><td><a href="'.$base_url.'ajax_admin=1&module=chrysa_cache&action=suppr_select_cache&name='.$d_aff.'">supprimer</a></td></tr>';
 		  }
 	  }
 	  $content.='</table>';
   }else{
-    $content='<br/>aucuns fichiers de cache générés';
+    $content='<div>aucuns fichiers de cache générés</div>';
   }
 	echo $content;
 ?>

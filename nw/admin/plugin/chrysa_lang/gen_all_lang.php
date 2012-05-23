@@ -1,4 +1,12 @@
 <?php
+ /**
+  * @fn gen_multilingue($dossier_en_cour=null,$lang=null)
+  * @global type $path
+  * @global array $exclu
+  * @param type $dossier_en_cour
+  * @param boolean $lang
+  * @brief fonction de génération des pages .mo de traductions pour chaques langues 
+  */
  function gen_multilingue($dossier_en_cour=null,$lang=null){
 	global $path,$exclu;
 	$exclu=array('.','..');

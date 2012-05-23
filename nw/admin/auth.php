@@ -43,14 +43,6 @@ if(is_admin())
 			inclure_plugin($_GET['module']);
 		}
 	}
-	elseif(isset($_GET['install']))
-	{
-		include_once$path.'admin/plugin/installer.php';
-	}
-	elseif(isset($_GET['uninstall']))
-	{
-		include_once$path.'admin/plugin/uninstaller.php';
-	}
 	else
 	{		
 		inclure_admin_header();

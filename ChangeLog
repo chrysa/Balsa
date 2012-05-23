@@ -229,3 +229,31 @@ ajout des liens de desintalation des plugins installer
 
 		/nw/install/void_bdd.class.php
 			supperssion du fichier
+
+0.5.0.1e
+	commentage et documentation des plugins chrysa_* et de nw/admin/plugin/controll_panel/gestion_plugin.php
+
+	bug non résolu 
+		l'éditeur de texte (encore)
+		les archives téléchargées depuis la gestion des plugins est corrompues
+		affichage du JS en brut lors de l'install des plugins suite a l'appel du fichier admin/plugin/controll_panel/controll_panel.js.php dans le manager
+
+	/nw/adim/plugins/manager.php		  
+		modif de sécu pour prévenir les messages d'erreur
+
+	/nw/adim/plugins/void_install.xml		  
+		mise a jour du gabarit
+
+	/nw/admin/plugin/chrysa_cache
+		refonte
+		suppression du hook d'appel de fonction suite a l'appel global des fonctions mis dans le init.php
+
+	/nw/fonction/fonction.php
+		débug de la fonction copy_r()
+		rajout de la fonction convertion_temps() (utilisé dans le plugin de cache mais util)
+
+	/nw/hook/after_plugin_link.php
+		modification de l'URL pour les installation et désinstallation pour mieux intégrer le message de confirmation ce qui redirige vers la page de gestion de plugins à l'affichage
+
+	/nw/auth.php
+		suppression des parties installation et désinstallation des plugins

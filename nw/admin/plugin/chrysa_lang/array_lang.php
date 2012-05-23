@@ -1,4 +1,13 @@
 <?php
+/**
+ * @file array_lang.php
+ * @auteur chrysa
+ * @version 1
+ * @date 21 mai 2012
+ * @category chrysa_lang
+ * @global array $array_lang array contenant les différentes langues prises en charges
+ * @brief page contenant l'array des langues
+ */
 global $array_lang;
 $array_lang['af_ZA']='Afrikaans';
 $array_lang['ar_AR']='العربية';
@@ -37,15 +46,12 @@ $array_lang['hy_AM']='Հայերեն';
 $array_lang['id_ID']='Bahasa Indonesia';
 $array_lang['is_IS']='Íslenska';
 $array_lang['it_IT']='Italiano';
-$array_lang['ja_JP']='日本語';
 $array_lang['ka_GE']='ქართული';
-$array_lang['ko_KR']='한국어';
 $array_lang['ku_TR']='Kurdî';
 $array_lang['la_VA']='lingua latina';
 $array_lang['lt_LT']='Lietuvių';
 $array_lang['lv_LV']='Latviešu';
 $array_lang['mk_MK']='Македонски';
-$array_lang['ml_IN']='മലയാളം';
 $array_lang['ms_MY']='Bahasa Melayu';
 $array_lang['nb_NO']='Norsk (bokmål)';
 $array_lang['ne_NP']='नेपाली';
@@ -64,14 +70,9 @@ $array_lang['sq_AL']='Shqip';
 $array_lang['sr_RS']='Српски';
 $array_lang['sv_SE']='Svenska';
 $array_lang['sw_KE']='Kiswahili';
-$array_lang['ta_IN']='தமிழ்';
-$array_lang['te_IN']='తెలుగు';
 $array_lang['th_TH']='ภาษาไทย';
 $array_lang['tl_PH']='Filipino';
 $array_lang['tr_TR']='Türkçe';
 $array_lang['uk_UA']='Українська';
 $array_lang['vi_VN']='Tiếng Việt';
-$array_lang['zh_CN']='中文(简体)';
-$array_lang['zh_HK']='中文(香港)';
-$array_lang['zh_TW']='中文(台灣)';
 ?>

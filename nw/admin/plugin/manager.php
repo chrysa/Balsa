@@ -48,29 +48,31 @@
 	  function uninstall($quoi,$node)
 	  {
 		  global $path;
-		  if($node->getAttribute('file')!='all')
-		  {
-			  $f_list=$node->childNodes;
-			  foreach($f_list as $f)
-			  {
-				  unlink($path.$quoi.'/'.$f->getAttribute('name'));
-			  }
-		  }
-		  else
-		  {
-			  $all=scandir($this->path.$quoi);
-			  foreach($all as $a_fn)
-			  {
-				  if($a_fn=='.' or $a_fn=='..')
-				  {
-					  continue;
-				  }
-				  else
-				  {
-					  unlink($path.$quoi.'/'.$a_fn);
-				  }
-			  }
-		  }
+			if($node->getAttribute('file')!=''){
+				if($node->getAttribute('file')!='all')
+				{
+					$f_list=$node->childNodes;
+					foreach($f_list as $f)
+					{
+						unlink($path.$quoi.'/'.$f->getAttribute('name'));
+					}
+				}
+				else
+				{
+					$all=scandir($this->path.$quoi);
+					foreach($all as $a_fn)
+					{			  
+						if($a_fn=='.' or $a_fn=='..')
+						{
+							continue;
+						}
+						else
+						{
+							unlink($path.$quoi.'/'.$a_fn);
+						}
+					}
+				}
+			}
 	  }
 
 	  function install_data()
@@ -111,31 +113,35 @@
     function install_bdd(){
       global $bdd;
       $sql=$this->xml->getElementsByTagName('sql');
-      if($sql->length>0){
-        foreach ($sql->getElementsByTagName('file') as $file_sql){
-          $bdd->query2(file_get_contents($file_sql));
+      foreach($sql as $sql){
+        if($sql->hasAttribute('count') AND is_numeric($sql->getAttribute('count')) AND ($sql->getAttribute('count')>0 OR $sql->getAttribute('count')!='')){
+          foreach ($sql->getElementsByTagName('file') as $file_sql){
+            $bdd->query2(file_get_contents($file_sql));
+          }
         }
       }
     }
 		
 		function install_lang(){
-		  global $path;
-		  
+		  global $path;		  
 			$lang=$this->xml->getElementsByTagName('lang');
 			if($lang->length>0){
-		    if(!is_file($path.'admin/plugin/chrysa_lang/installed')){
-		      $chrysa_lang_install=new plugin_manager('chrysa_lang');
-		      $chrysa_lang_install->instal_all();
-		    }
-			
 			  foreach ($lang as $lang){
-				  $files=$lang->getRElementsByTagName('file');
-				  foreach($files as $file){
-					  if(!is_file($path.'data/'.$file->getRElementsByTagName('lang_code'))){
-						  mkdir($path.'data/'.$file->getRElementsByTagName('lang_code'));
-					  }
-					  copy($this->path.'/'.$file->getRElementsByTagName('lang_code').$file->getRElementsByTagName('name'),$path.'data/'.$file->getRElementsByTagName('lang_code').$file->getRElementsByTagName('name'));
-				  }
+					if($lang->hasAttribute('count') AND is_numeric($lang->getAttribute('count')) AND ($lang->getAttribute('count')>0 OR $lang->getAttribute('count')!='')){
+						$files=$lang->getRElementsByTagName('file');
+						foreach($files as $file){
+							if($file->getRElementsByTagName('lang_code')!='' AND $file->getRElementsByTagName('name')!=''){
+								if(!is_file($path.'admin/plugin/chrysa_lang/installed')){
+									$chrysa_lang_install=new plugin_manager('chrysa_lang');
+									$chrysa_lang_install->instal_all();
+								}
+								if(!is_file($path.'data/'.$file->getRElementsByTagName('lang_code'))){
+									mkdir($path.'data/'.$file->getRElementsByTagName('lang_code'));
+								}
+								copy($this->path.'/'.$file->getRElementsByTagName('lang_code').'/'.$file->getRElementsByTagName('name'),$path.'data/'.$file->getRElementsByTagName('lang_code').'/'.$file->getRElementsByTagName('name'));
+							}						
+						}
+					}
 			  }
 			  inc($path.'admin/plugin/chrysa_lang/gen_all_lang.php');
 			  gen_multilingue();

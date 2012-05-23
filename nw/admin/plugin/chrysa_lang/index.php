@@ -1,5 +1,17 @@
 <?php
-global $path;
+/**
+ * @file index.php
+ * @auteur chrysa
+ * @version 1
+ * @date 21 mai 2012
+ * @category chrysa_lang
+ * @global string $path chemin du dossier nw/
+ * @global string $base_url url du site
+ * @see inc()
+ * @see gen_multilingue()
+ * @brief page de navigation pour la gestion des langues
+ */
+global $path,$base_url;
 if(isset($_GET['install'])){
 
 }else{
@@ -32,7 +44,7 @@ if(isset($_GET['install'])){
 			break;
 			default:
 				$array_lang_exist=scandir($path.'data/locale/');
-				//test de l'existence d'un dossier lang >2 pour ne pas prendre en compre '.' et '..'
+				//test de l'existence d'un dossier lang>2 pour ne pas prendre en compte '.' et '..'
 				if(count($array_lang_exist)>2){
 					inc($path.'admin/plugin/chrysa_lang/gestion_lang.php');
 				}else{

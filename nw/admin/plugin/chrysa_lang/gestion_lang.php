@@ -1,5 +1,17 @@
 <?php
-global $path,$array_lang;
+/**
+ * @file gestion_lang.php
+ * @auteur chrysa
+ * @version 1
+ * @date 21 mai 2012
+ * @category chrysa_lang
+ * @global string $path chemin du dossier nw/
+ * @global string $base_url url du site
+ * @global array $array_lang array contenant les différentes langues prises en charges
+ * @var array $array_lang_exist array contenant toutes les langues dans lequel le site est traduit
+ * @brief page d'ajout de nouveaux code de traductions
+ */
+global $path,$array_lang,$base_url;
 $array_lang_exist=scandir($path.'data/locale/');
 array_shift($array_lang_exist); 
 array_shift($array_lang_exist); 

@@ -1,4 +1,14 @@
 <?php
+/**
+ * @file modif_page.php
+ * @auteur chrysa
+ * @version 1
+ * @date 21 mai 2012
+ * @category chrysa_lang
+ * @global string $path chemin du dossier nw/
+ * @global string $base_url url du site
+ * @brief page de modification de traductions
+ */
 global $path,$base_url;
 //récupération du contenu de la page sélectionnée	
 $content=file_get_contents($path.'data/locale/'.$_GET['lang'].'/LC_MESSAGES/'.$_GET['page'].'.po');

@@ -1,8 +1,20 @@
 <?php
+/**
+ * @file conf_hta.php
+ * @auteur chrysa
+ * @version 1
+ * @date 21 mai 2012
+ * @category chrysa_htaccess
+ * @global string $path_w chemin du dossier www/
+ * @global string $path chemin du dossier nw/
+ * @global string $base_url url du site
+ * @brief page de configuration du htaccess
+ */
 	global $path,$path_w,$base_url;
 	
+	//création de la configuration
 	if(isset($_POST['configurer'])){
-		$conf = new DOMDocument();
+		$conf=new DOMDocument();
 		$conf->Load($path.'admin/plugin/chrysa_htaccess/htaccess.xml');
 		if($conf->getElementsByTagName('config')->length==0){
 			$newconf=$conf->createElement('config');
@@ -15,11 +27,11 @@
 			$place_new_conf=$conf->getElementsByTagName('root')->item(0);
 			$place_new_conf->appendChild($newconf);  
 		}else{
-			echo 'Le .htaccess a déja été configuré';
+			echo 'Le .htaccess a déjà été configuré';
 		}
 		$conf->save($path.'admin/plugin/chrysa_htaccess/htaccess.xml');
 	}	
-		
+	//modification de la configuration
 	if(isset($_POST['modifier'])){
 		$axx = new DOMDocument();
 		$axx->Load($path.'admin/plugin/chrysa_htaccess/htaccess.xml');
@@ -34,7 +46,7 @@
 		}
 		$axx->save($path.'admin/plugin/chrysa_htaccess/htaccess.xml');			
 	}
-	
+	//récupération de la configuration du htaccess et préremplissage du formulaire
 	$conf = new DOMDocument();
 	$conf->Load($path.'admin/plugin/chrysa_htaccess/htaccess.xml');
 	if($conf->getElementsByTagName('config')->length>0){

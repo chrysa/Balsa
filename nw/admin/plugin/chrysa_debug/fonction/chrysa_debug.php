@@ -1,6 +1,19 @@
 <?php
-
-//fonction de tracage de variable et d'affichage de contenu
+/**
+ * @file chrysa_debug.php
+ * @auteur chrysa
+ * @version 1
+ * @date 21 mai 2012
+ * @category chrysa_debug
+ * @brief page contenant des fonctions de débug
+ */
+/**
+ * @fn debug($nom,$var)
+ * @param string $nom nom de la variable
+ * @param string $var variable a tracer
+ * @var array $debug array contenant les changements de valeur de la variable
+ * @brief fonction de tracage de variable et d'affichage de contenu
+ */
 function debug($nom,$var){
 	//stockage du contexte de debug
 	$debug=debug_backtrace();
