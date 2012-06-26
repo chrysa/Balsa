@@ -1,0 +1,1 @@
+<a href="<?php echo substr('http://'.$_SERVER["SERVER_NAME"].$_SERVER['REQUEST_URI'],0,-strlen('admin.php?'.$_SERVER['QUERY_STRING'])).'install.php';?>">lancer la réinstallation</a>

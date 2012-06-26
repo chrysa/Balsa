@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root><infos><autor name="chrysa"/><version version="1"/><description>plugin permettant la réinstallation du projet</description></infos><installer><fonction /><page /><hook /><ajax /><media><css /><js /><img /></media><data /><sql /><lang /><www><file name="install.php" type=""/></www><nw><folder name="install"/></nw></installer></root>

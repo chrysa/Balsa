@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<infos>
+		<autor name="chrysa"/>
+		<version version="béta"/>
+		<description>plugin rudimentaire de gestion d'accès aux pages suivants les utilisateurs contenant une mini gestion des comptes utilisateurs et des administrateurs avec uns tockage en XML et/ou SQL</description>
+	</infos>
+	<installer>
+		<fonction file="all" />
+		<page />
+		<hook file="all" />
+		<ajax />
+		<media>
+			<css />
+			<js />
+			<img />
+		</media>
+		<data />
+		<sql />
+		<lang />
+		<www />
+		<nw />
+	</installer>
+</root>
