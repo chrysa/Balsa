@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<installer><fonction file="all"><libs></libs></fonction><page file=""></page><hook file=""></hook><ajax file=""></ajax><media><css></css><js></js><img></img></media><data></data></installer>
+<root><infos><autor name="chrysa"/><version version="1"/><description>plugin de gestion de tokens de sécurité</description></infos><installer><fonction file="all"><libs></libs></fonction><page file=""></page><hook file=""></hook><ajax file=""></ajax><media><css></css><js></js><img></img></media><data></data></installer></root>

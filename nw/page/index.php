@@ -11,12 +11,16 @@
 			<?php
 			hook('index_before_inclure_page',array('page'=>$_GET['page'],'display'=>''));
 			echo $_HOOK['display'];
-			if(isset($_GET['page']))
+			$acces=hook('verification_axx',array('page'=>$_GET['page']));
+			if(empty($acces)){
+			  $acces=true;
+			}		
+			if(isset($_GET['page']) AND $acces==true)
 			{
 				inclure_page($_GET['page']);
 			}
 			hook('index_after_inclure_page',array('page'=>$_GET['page'],'display'=>''));
-			echo $_HOOK['display'];
+			echo $_HOOK['display'];			
 			?>
 		</div>
 		<div style="clear:both"></div>

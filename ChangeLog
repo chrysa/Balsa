@@ -131,7 +131,7 @@ ajout des liens de desintalation des plugins installer
 		exemple a venir dans le hellowworld ;)
 	avancé du activity_logger
 	
-0.5.0.1a
+0.5.0.1
 	bug non résolus
 		bug de l'explorer de fichier
 
@@ -194,66 +194,116 @@ ajout des liens de desintalation des plugins installer
 		intégrer la prise en charge des fichiers SQL dans le plugin packager => impossible tant que l'explorer de fichier n'est pas débuggué
 		intégrer la prise en charge des fichiers langues dans le plugin packager => impossible tant que l'explorer de fichier n'est pas débuggué
 		
-0.5.0.1b		
-	debug de l'installeur de plugins suite a la 0.5.0.1a
+0.5.0.2
+	fusion des anciennes branches de changeLog 0.5.0.1b à 0.5.0.1f pour plus de clareté et différents ajouts
 
-	/nw/admin/plugin/void_install.xml
-	  ajout du noeud WWW pour la mise en place de fichier dans le dossier www
-		  
- 	/nw/amdim/plugins/manager.php		  
-	  ajout des fonctions install_www et uninstall_www pour gérer les fichiers du dossier www	  
-		  
-	a tester
-		la gestion des plugins		  
+	ajout du plugin de gestion de .htaccess => chrysa_htaccess
+	ajout d'un plugin de réinstallation => chrysa_reinstall
+	ajout d'un plugin de gestion d'accès /!\TRÈS BASIQUE/!\ => chrysa_axx => gestion d'utilisateur d'admin de groups et d'accès aux pages
+	commentage des plugins chrysa_* et de nw/admin/plugin/controll_panel/gestion_plugin.php
+	debug de l'installeur de plugins suite a la 0.5.0.1
+	divers corrections de bugs
 
-0.5.0.1c
-	ajout du plugin de gestion de .htaccess
-	
-	/nw/amdim/plugins/manager.php		  
-		débug 
+	/nw/init.php
+		ajout d'un hook pour la gestion d'accès
+		ajout d'un test pour l'initialisation de la $_SESSION['user_id']
+		modifidation de l'appel global de fonctions
+		modification de l'initialisation de base de données
+		modification de l'autoloader prise en compte des fichiers *.class.php/*.interface.php/*.helper.php
 
-	/nw/fonction/fonction.php
-		suppression de tous les doubles slashs dus à la présence du slash a la fin du path, du path_w et de l'url de base
-
-0.5.0.1d
-	ajout de la possibilité d'utiliser plusieurs base de données
-		/www/install.php
-			refonte des fonctions create_bdd() et create_init() avec modification de l'ordre d'exécution des fonctions d'installation
-			
-		/nw/fonction/bdd.class.php
-			initialisation des logs depuis le __construct()
-			modification du nom de la classe passage de "class Bdd" à "class bdd" pour le rendre compatible avec l'autoloader
-
-		/nw/install/void_init.php
-			modifification de l'init de DB
-
-		/nw/install/void_bdd.class.php
-			supperssion du fichier
-
-0.5.0.1e
-	commentage et documentation des plugins chrysa_* et de nw/admin/plugin/controll_panel/gestion_plugin.php
-
-	bug non résolu 
-		l'éditeur de texte (encore)
-		les archives téléchargées depuis la gestion des plugins est corrompues
-		affichage du JS en brut lors de l'install des plugins suite a l'appel du fichier admin/plugin/controll_panel/controll_panel.js.php dans le manager
-
-	/nw/adim/plugins/manager.php		  
-		modif de sécu pour prévenir les messages d'erreur
-
-	/nw/adim/plugins/void_install.xml		  
-		mise a jour du gabarit
-
+	/nw/admin/auth.php
+		ajout du cas d'une URL ne contenant pas de $_GET['module'] qui redirige vers controll_panel
+		ajout d'une sécurité empêchant l'accès aux pages de plugins addditionnels non installés qui redirige vers controll_panel le cas échéant
+		ajout d'une redirection  vers controll_panel si le plugin n'as pas de fichier index.php
+		ajout de hook pour le plugin chrysa _axx dans is_admin() et is_ban()
+		suppression des parties installation et désinstallation des plugins
+		
 	/nw/admin/plugin/chrysa_cache
-		refonte
+		modification
 		suppression du hook d'appel de fonction suite a l'appel global des fonctions mis dans le init.php
 
+	/nw/admin/plugin/chrysa_lang
+		modification
+
+	/nw/amdin/plugins/controll_panel/controll_panel.php
+		list_plug_add()
+			fusion avec le hook_after_plugin_links
+			ajout des infos/versions/descriptions des plugs
+
+	/nw/amdin/plugins/controll_panel/gestion_plugin.php
+		refonte
+
+	/nw/amdim/plugins/manager.php		  
+		ajout de hook pour le plugins chysa_axx
+		ajout des fonctions install_www et uninstall_www pour gérer les fichiers du dossier www	  
+		ajout des fonctions install_nw et uninstall_nw pour gérer le dossier nw dans le cas d'éventuel ajouts (utilisé dans le plugins chrysa_reinstall)	  
+		ajout d'une redirection vers le plugin après son installation
+		modif de sécu pour prévenir les messages d'erreur
+		modification install_data() pour sélectionner que les dossiers du noeud data
+		différents correctifs
+	
+	/nw/admin/plugin/void_install.xml
+		ajout d'un noeud root qui englovbe els noeud infos et installer
+		ajout d'un noeud infos 
+			ajout du noeud nw
+			ajout du noeud WWW
+
+	/nw/fonction/bdd.class.php
+  	ajout de la possibilité d'utiliser plusieurs base de données
+		ajout de la méthode magique __call() => permettant d'appeler les méthodes PDO non surchargées dans la class
+		modification du nom de la classe passage de "class Bdd" à "class bdd" pour le rendre compatible avec l'autoloader
+
 	/nw/fonction/fonction.php
+		ajout des fonction hour_selector()/minute_selector()/second_selector()/convertion_temps() (utilisé dans le plugin de cache mais util)
+		ajout de la déconnection à la base de données dans la fonction de traitement de fin page => traite_fin_de_page()
+		ajout d'un fonction d'appels de fichier XML
 		débug de la fonction copy_r()
-		rajout de la fonction convertion_temps() (utilisé dans le plugin de cache mais util)
+		suppression de tous les doubles slashs dus à la présence du slash a la fin du path, du path_w et de l'url de base
+		suppression de la fonction get_client_param() car déja présent dans le init
+		modification de la regex de validation des mails dans pre_reg() => résolution de bug
 
 	/nw/hook/after_plugin_link.php
 		modification de l'URL pour les installation et désinstallation pour mieux intégrer le message de confirmation ce qui redirige vers la page de gestion de plugins à l'affichage
+	  suppression du hook et intégration à la fonction list_plug_add()
 
-	/nw/auth.php
-		suppression des parties installation et désinstallation des plugins
+	/nw/hook/after_init.php
+		suppression de l'appel de $base_url non utilisé dans le hook
+
+	/nw/install/void_bdd.class.php
+		supperssion du fichier
+  
+  /nw/install/void_goulot.php
+    ajout d'un hook pour le plugin chrysa_axx
+    suppression de l'appel relatif du fichier init.php un appel absolu étant fait dans le fichier d'install
+  
+  /nw/page/index.php
+    ajout d'un hook pour le plugin chrysa_axx
+    
+	/www/install.php
+		ajout d'une option de la "désinstallation automatique" du plugin de réinstall si il activé
+		ajout de la possibilité de supprimer l'ancienne base de données (pratique en cas de réinstallation);
+	  modification de l'id dans le XML d'amin passage de 1 a la même valeur que celle rentré en base de données et défini par $bdd->get_primkey(); 
+		refonte des fonctions create_bdd() et create_init() avec modification de l'ordre d'exécution des fonctions d'installation
+		repositionnement des éléments de création de base de données
+		remise en place de la suppression du dossier install suite a la création du plugin de réinstallation
+		réparation de la création du compte admin en DB
+
+	a faire
+	  impossible tant que l'explorer de fichier n'est pas débuggué pour les tests et l'intégration
+		  intégrer la prise en charge des fichiers langues dans le plugin packager
+		  intégrer la prise en charge des fichiers du nw dans le plugin packager
+		  intégrer la prise en charge des fichiers du www dans le plugin packager
+		  intégrer la prise en charge des fichiers SQL dans le plugin packager
+		  intégrer le noeud infos dans le plugin packager
+		  intégrer le noeud root dans le plugin packager
+
+	a tester
+		la gestion des plugins		  
+		le plugins chrysa_axx (test compet à venir)
+        le plugins chrysa_htaccess (test compet à venir)
+
+	bug non résolus
+		bug de l'explorer de fichier (encore)
+		lors du téléchargement de plugins les archives sont en bonne état sur le serveurs mais inutilisable après téléchargement
+		fonction pointant sur des fichiers non présents tels que les pages citées dans les fonctions en liens avec les captchas
+		hook pointant sur des fichiers non présents

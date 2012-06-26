@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<installer><fonction file=""><libs/></fonction><page file=""/><hook file=""/><ajax file=""/><media><css/><js/><img/></media><data><folder name="locale" parent=""/></data></installer>
+<root><infos><autor name="chrysa"/><version version="1"/><description>plugin de gestion de l'internationalisation d'un site via interface graphique</description></infos><installer><fonction /><page /><hook/><ajax /><media><css /><js /><img /></media><data><folder name="locale" parent=""/></data><sql /><lang /><www /><nw /></installer></root>

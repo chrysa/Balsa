@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<root>
+<infos>
+<autor name="autor_name"/>
+<version version=""/>
+<description></description>
+</infos>
 <installer>
 <fonction file="all|list">
 <libs>
@@ -40,5 +46,10 @@
 <www>
 <file name="" type=""/>
 </www>
+<nw>
+<folder name="void if parent is nw/">
+<file name="" type=""/>
+</folder>
+</nw>
 </installer>
-
+</root>

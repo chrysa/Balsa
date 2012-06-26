@@ -127,7 +127,7 @@ function valid_input($input,$checker=array('default'))
 			}
 		}
 		else
-		{
+		{		
 			if(preg_match($c,$input))
 			{
 				hook('valid_input_false',array('input'=>$input,'checker'=>$c));
@@ -154,7 +154,7 @@ function pre_reg($type)
 			return array('[\x00\x08\x0B\x0C\x0E-\x1F]','[^\P{Cc}\t\r\n]',"/".preg_quote("~`!#$%^&*()+=\\][{}¦;\"'?/><","/")."/");
 			break;
 		case 'mail':
-			return '\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b';
+			return '#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#';
 			break;
 		default:
 			return array('[\x00\x08\x0B\x0C\x0E-\x1F]','[^\P{Cc}\t\r\n]',"/".preg_quote("~`!#$%^&*()+=\\][{}¦;\"'?/><","/")."/");
@@ -433,67 +433,6 @@ function is_pair($i)
 	}
 }
 
-function get_client_param()
-{
-	$u_agent = $_SERVER['HTTP_USER_AGENT']; 
-    $nav_name = 'unknown';
-    $OS_name = 'unknown';
-    $version= 'unknown';
-    
-    if (preg_match('/linux/i', $u_agent)) {
-        $OS_name = 'linux';
-    }elseif (preg_match('/macintosh|mac os x/i', $u_agent)) {
-        $OS_name = 'mac';
-    }elseif (preg_match('/windows|win32/i', $u_agent)) {
-        $OS_name = 'windows';
-    }
-    
-    if(preg_match('/MSIE/i',$u_agent)) { 
-        $nav_name = 'Internet Explorer'; 
-        $nav_utilisateur = "MSIE"; 
-    }elseif(preg_match('/Firefox/i',$u_agent)){ 
-        $nav_name = 'Firefox'; 
-        $nav_utilisateur = "Firefox"; 
-    }elseif(preg_match('/Chrome/i',$u_agent)){ 
-        $nav_name = 'Google Chrome'; 
-        $nav_utilisateur = "Chrome"; 
-    }elseif(preg_match('/Safari/i',$u_agent)){ 
-        $nav_name = 'Apple Safari'; 
-        $nav_utilisateur = "Safari"; 
-    }elseif(preg_match('/Opera/i',$u_agent)){ 
-        $nav_name = 'Opera'; 
-        $nav_utilisateur = "Opera"; 
-    }elseif(preg_match('/Netscape/i',$u_agent)){ 
-        $nav_name = 'Netscape'; 
-        $nav_utilisateur = "Netscape"; 
-    } 
-    
-    $known = array('Version', $nav_utilisateur, 'other');
-    $pattern = '#(?<browser>' . join('|', $known) .')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
-    if (preg_match_all($pattern, $u_agent, $matches)) {
-        $i = count($matches['browser']);
-        if ($i != 1){
-            if (strripos($u_agent,"Version") < strripos($u_agent,$nav_utilisateur)){
-                $version= $matches['version'][0];
-            }else{
-                $version= $matches['version'][1];
-            }
-        }else{
-            $version= $matches['version'][0];
-        }        
-    }
-    
-	$navigateur['nom']=$nav_name;
-	$navigateur['version']=$version;
-	$navigateur['type']='desktop';
-	$navigateur['os']= $OS_name;
-	$navigateur['complete_user_agent']=$u_agent;
-	$_SESSION['client']=array();
-	$_SESSION['client']['navigateur']=$navigateur;
-	$_SESSION['client']['from']=false;
-} 
-
-
 //add error to the session error variable
 function report_erreur($type,$erreur,$return=false)
 {
@@ -605,6 +544,7 @@ function traite_fin_de_page()
 	$log=fopen($path.'data/log/'.$log_file,'a+');
 	fputs($log,$rapport);
 	fclose($log);
+	$bdd->disconnect();
 	return true;
 }
 
@@ -902,7 +842,7 @@ function copy_r( $path, $dest )
         if( sizeof($objects) > 0 )
         {
             foreach( $objects as $file )
-            {     
+            {     		
                 if( $file == "." || $file == ".." )
                     continue;
                 // go on
@@ -911,7 +851,7 @@ function copy_r( $path, $dest )
                     copy_r( $path.'/'.$file, $dest.'/'.$file );
                 }
                 else
-                {
+                { 
                     copy( $path.'/'.$file, $dest.'/'.$file );
                 }
             }
@@ -932,11 +872,10 @@ function copy_r( $path, $dest )
 #http://nashruddin.com/Remove_Directories_Recursively_with_PHP
 function rmdir_r($dir) 
 {
-    $files = scandir($dir);
+    $files=scandir($dir);
     array_shift($files);    // remove '.' from array
-    array_shift($files);    // remove '..' from array
-   
-    foreach ($files as $file) {
+    array_shift($files);    // remove '..' from array  
+    foreach ($files as $file) {			
         $file = $dir . '/' . $file;
         if (is_dir($file)) {
             rmdir_r($file);
@@ -949,7 +888,7 @@ function rmdir_r($dir)
     }else{
     	report_erreur2('0003',__FILE__,__LINE__,'rmdir_r cant remove '.$dir);
         return false;
-    }
+    } 
 }
 
 function copies($paths)
@@ -1273,8 +1212,122 @@ function year_selector($id='',$today=true,$start='',$end='')
 	return $display;
 }
 /**
+ * @fn hour_selector()
+ * @brief fonction générant une liste déroulent des heures
+ * @param string $id complétement a l'identifiant et au nom
+ * @param boolean $hour définit si l'heure actuelle doit être sélectionnée
+ * @param boolean $zero définit si les heures doivent bénéficier du zéro initial
+ * @return string $display
+ */
+function hour_selector($id='',$hour=true,$zero=true)
+{
+	$display=
+	'
+	<select id="hour_'.$id.'" name="hour_'.$id.'">
+	';
+	$x=1;
+	while($x<=24)
+	{
+		if($zero AND $x<10){
+			$x='0'.$x;
+		}
+		$display.=
+		'
+		<option value="'.$x.'"
+		';
+		if($hour==true)
+		{
+			if($zero AND date('H')==$x)
+			{
+				$display.='selected';
+			}elseif(date('G')==$x){
+				$display.='selected';
+			}
+		}
+		$display.='>'.$x.'</option>';
+		$x++;
+	}
+	$display.=
+	'
+	</select>
+	';
+	return $display;
+}
+/**
+ * @fn minute_selector()
+ * @brief fonction générant une liste déroulent des minutes
+ * @param string $id complétement a l'identifiant et au nom
+ * @param boolean $minute définit si la minute actuelle doit être sélectionnée
+ * @return string $display
+ */
+function minute_selector($id='',$minute=true)
+{
+	$display=
+	'
+	<select id="minute_'.$id.'" name="minute_'.$id.'">
+	';
+	$x=1;
+	while($x<=60)
+	{
+		$display.=
+		'
+		<option value="'.$x.'"
+		';
+		if($minute==true)
+		{
+			if(date('i')==$x)
+			{
+				$display.='selected';
+			}
+		}
+		$display.='>'.$x.'</option>';
+		$x++;
+	}
+	$display.=
+	'
+	</select>
+	';
+	return $display;
+}
+/**
+ * @fn second_selector()
+ * @brief fonction générant une liste déroulent des secondes
+ * @param string $id complétement a l'identifiant et au nom
+ * @param boolean $second définit si la seconde actuelle doit être sélectionnée
+ * @return string $display
+ */
+function second_selector($id='',$second=true)
+{
+	$display=
+	'
+	<select id="second_'.$id.'" name="second_'.$id.'">
+	';
+	$x=1;
+	while($x<=60)
+	{
+		$display.=
+		'
+		<option value="'.$x.'"
+		';
+		if($second==true)
+		{
+			if(date('s')==$x)
+			{
+				$display.='selected';
+			}
+		}
+		$display.='>'.$x.'</option>';
+		$x++;
+	}
+	$display.=
+	'
+	</select>
+	';
+	return $display;
+}
+/**
  * @fn convertion_temps()
- * @brief fonction de conversion d'un nombre de secondes
+ * @brief fonction de conversion d'un nombre de secondes en mois/jours/heures/secondes
  * @param numeric $duree nombre de secondes a convertir
  * @var numeric $i_restantes nombre de minutes
  * @var numeric $H_restantes nombre d'heure

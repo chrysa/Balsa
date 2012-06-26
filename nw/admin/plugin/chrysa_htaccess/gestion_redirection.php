@@ -11,14 +11,14 @@
  * @var string $act variable d'initialisation d'action
  * @brief page de gestion des redirections d'url amettre en place
  */
-	global $path,$base_url,$array_type_para_redir;
+	global $path,$path_w,$base_url,$array_type_para_redir;
 ?>	
 <h1>gestion des réécriture d'URL</h1>
 <?php 	
   //récupération de toutes la pages contenues dans le dossier page
-	$page=scandir($path.'/page');
+	$page=scandir($path_w);
 	//array des items contenus dans $pages qui ne seront pas pris en compte
-	$except=array('.','..','BO.php','user.php');
+	$except=array('.','..','.htaccess');
 	//initialisation de l'action
 	$act=(isset($_GET['act']))?$_GET['act']:'';
 	switch ($act){
@@ -37,7 +37,7 @@
 			$form='<h2>ajout d\'une règle de réécriture d\'URL étape 2/2</h2>page de référence : <select name="page">';
 			//selection de la page
 			foreach($page as $p){
-				if(!in_array($p,$except)){
+				if(!in_array($p,$except) AND !is_dir($p)){
 					$form.='<option value="'.$p.'">'.$p.'</option>';
 				}
 			}

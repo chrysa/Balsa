@@ -16,9 +16,9 @@
  * @brief page de gestion des plugins additionnels
  * page de gestion des plugins additionnels permettant l'instalation, la désinstalation, l'upload, le téléchargement et la suppression de plugins
  * 
- * @todo réparer le téléchargemnt de fichier dû a des archives correompues après le téléchargement
+ * @todo réparer le téléchargemnt de fichier => archives correompues après le téléchargement
  */
-	global $bdd,$base_url,$path;
+	global $base_url,$path;
 ?>
 <div>
 	<a href="<?php echo $base_url.'admin.php?page_admin=a&module=controll_panel&action=plugin&gestion=gestion'; ?>">gestion d'activation des plugins</a>
@@ -127,7 +127,7 @@
 							$res=$bdd->query2($sql)->fetch(PDO::FETCH_ASSOC);
 							$create_table=$res['Create Table'].";\n";
 							$insertions='INSERT INTO '.$table.' VALUES (';
-							$req_table=$bdd->query2('SELECT * FROM '.$table)->fetch(PDO::FETCH_ASSOC);
+							$req_table=$bdd->query2('SELECT * FROM '.$table)->fetchall(PDO::FETCH_ASSOC);
 							foreach($req_table as $r_t){
 								$insertions .='\''.$r_t.'\',';
 							}
@@ -195,10 +195,10 @@
 			}
 			break;
 		case 'install':
-			include_once$path.'admin/plugin/installer.php';
+			include_once $path.'admin/plugin/installer.php';
 			break;
 		case 'uninstall':
-			include_once$path.'admin/plugin/uninstaller.php';
+			include_once $path.'admin/plugin/uninstaller.php';
 			break;
 	}
 	?>

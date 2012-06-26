@@ -23,11 +23,11 @@
 			}
 		}	
 		if(file_put_contents($path.'data/locale/'.$_GET['lang'].'/LC_MESSAGES/'.$_POST['nom_page'].'.po', $str_po)){
-			header('location: '.$base_url.'admin.php?page_admin=1&module=chrysa_lang&action=gestion_lang&lang='.$_GET['lang']);
+			header('location: '.$base_url.'admin.php?page_admin=1&module='.$_GET['module'].'&action=gestion_lang&lang='.$_GET['lang']);
 		}
 	}
 ?>
-<form method="post" action="<?php echo $base_url ?>admin.php?page_admin=1&module=chrysa_lang&lang=<?php echo $_POST['lang']; ?>&action=ajout_page">
+<form method="post" action="<?php echo $base_url ?>admin.php?page_admin=1&module=<?php echo $_GET['module'] ?>&lang=<?php echo $_POST['lang']; ?>&action=ajout_page">
 	<table width="100%">
 		<caption>page : <?php echo $_POST['nom_page'];?></caption>
 		<tbody>

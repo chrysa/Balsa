@@ -82,7 +82,7 @@ function list_plugin_install()
 		if($d=='.' or $d=='..')
 		{
 			continue;
-	}
+  }
 		elseif(!is_dir($path.'admin/plugin/'.$d) OR (!is_file($path.'admin/plugin/'.$d.'/installed') AND is_file($path.'admin/plugin/'.$d.'/install.xml')))
 		{
 			continue;
@@ -103,41 +103,71 @@ function list_plugin_install()
 
 function list_plugin_add()
 {
-	global $path, $base_url,$_HOOK;
-	$display=
-	'
-	<div class="file_list" id="plugin_list">
-	<h2>Liste des plugins additionnels</h2>
-	lors de la désinstallation d\'un plugin toutes les données stockées où les fichiers langues seront conservés
-	';
-	$dir=scandir($path.'admin/plugin/');
-	foreach($dir as $d)
-	{
-		if($d=='.' or $d=='..')
-		{
-			continue;
-		}
-		elseif(!is_dir($path.'admin/plugin/'.$d) OR !is_file($path.'admin/plugin/'.$d.'/install.xml'))
-		{
-			continue;
-		}
-		else
-		{
-			hook('after_plugin_link',array("display","p_name"=>$d));
-			
-			if(is_file($path.'admin/plugin/'.$d.'/installed')){
-				$display.=
-				'
-				<div class="plugin" id="plug_'.$d.'">
-					<a href="'.$base_url.'admin.php?page_admin=1&module='.$d.'">'.$d.'</a>';
-			}else{
-				$display.='<div class="plugin" id="plug_'.$d.'">'.$d;			
-			}
-			$display.=$_HOOK['display'].'</div>';
-		}
-	}
-	$display.='</div>';
-	return $display;
+  global $path, $base_url;
+  $display='
+  <div class="file_list" id="plugin_list">
+    <h2>Liste des plugins additionnels</h2>
+    lors de la désinstallation d\'un plugin toutes les données stockées où les fichiers langues seront conservés';
+    $dir=scandir($path.'admin/plugin/');
+    if(count($dir)>2){
+      $display.='<table width="100%">
+                  <thead>
+                    <tr align="center">
+                      <td>action</td><td>nom<td><td>auteur</td><td>version</td><td>description</td><td>action</td>
+                    </tr>
+                  </thead>
+                  <tbody>';
+                    foreach($dir as $d){
+                      if($d=='.' or $d=='..'){
+                        continue;
+                      }elseif(!is_dir($path.'admin/plugin/'.$d) OR !is_file($path.'admin/plugin/'.$d.'/install.xml')){
+                        continue;
+                      }else{
+                        if(is_file($path.'admin/plugin/'.$d.'/installed')){
+                          $nom='<a href="'.$base_url.'admin.php?page_admin=1&module='.$d.'">'.$d.'</a>';
+                        }else{
+                          $nom=$d;			
+                        }
+                        if(is_file($path.'admin/plugin/'.$d.'/installed')){
+                          $etat='<a href="'.$base_url.'admin.php?page_admin=a&module=controll_panel&action=plugin&gestion=uninstall&plugin='.$d.'"> désinstaller</a>';
+                        }else{
+                          $etat='<a href="'.$base_url.'admin.php?page_admin=a&module=controll_panel&action=plugin&gestion=install&plugin='.$d.'"> installer</a>';
+                        }
+                        
+                        $xml_plug=new DOMDocument();                
+                        $xml_plug->Load($path.'admin/plugin/'.$d.'/install.xml');
+                        $plug=$xml_plug->getElementsByTagName('infos');
+                        foreach ($plug as $p){  
+                          $sel_auteur=$p->getElementsByTagName('autor');
+                          foreach($sel_auteur as $s_a){                     
+                            $auteur=$s_a->getAttribute('name');
+                          }
+                          $sel_version=$p->getElementsByTagName('version');
+                          foreach($sel_version as $s_v){
+                            $version=$s_v->getAttribute('version');                          
+                          }
+                          $sel_description=$p->getElementsByTagName('description');
+                          foreach($sel_description as $s_d){
+                            $description=$s_d->nodeValue;
+                          }
+                        }
+                        $xml_plug->saveXML();    
+                      }
+                      $display.='<tr class="plugin" id="plug_'.$d.'">
+                                  <td align="center">'.$etat.'</td><td align="center">'.$nom.'<td><td align="center">'.$auteur.'</td><td align="center">'.$version.'</td><td>'.$description.'</td><td align="center">'.$etat.'</td>
+                                 </tr>';
+                    }                         
+       $display.='</tbody>
+                  <tfoot>
+                    <tr align="center">
+                      <td>action</td><td>nom<td><td>auteur</td><td>version</td><td>description</td><td>action</td>
+                    </tr>
+                  </tfoot>';
+    }else{
+      $display.='acuns plugins additionnels installables';
+    }
+  $display.='</div>';
+  return $display;
 }
 
 function list_plugin_dl()

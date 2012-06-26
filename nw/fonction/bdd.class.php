@@ -7,9 +7,8 @@
     private $bdServer;
     private $connexion;
     private $estConnecte;
-
-
-    function __construct($user,$mdp,$db,$host)
+		
+  	public function __construct($user,$mdp,$db,$host)
     {
       $this->bdUser = $user;
       $this->bdPassWord = $mdp;
@@ -18,7 +17,20 @@
       $this->estConnecte = false;
       $this->nbreq=0;
       $this->reqtime=0;
-    }
+		}
+
+		public function __call ($nom, $arguments)
+		{
+			if(is_array($arguments)){
+				foreach($arguments as $a){
+					$reponse=$this->connexion->$nom($a);
+					return $reponse;
+				}
+			}else{
+				$reponse=$this->connexion->$nom($arguments);
+				return $reponse;
+			}
+		}
 
     public function creat_db_Balsa($db_name='Balsa',$crea_db=true)
     {
@@ -53,7 +65,7 @@
     * Se connecte à la base de donnée
     */
     public function connect()
-    {
+		{		
       try
       {
         if ($this->bdPassWord=="")
@@ -160,6 +172,6 @@
         $key.=chr($k);
       }
       return $key;
-    }
+    }		
   }
 ?>

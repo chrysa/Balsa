@@ -1,5 +1,9 @@
-www/goulot.php
 www/admin.php
-nw/fonction/bdd.class.php
+www/goulot.php
+www/index.php
+nw/init
 nw/fonction/mail.php
 nw/data/log/*
+nw/data/chrysa_lang/*
+nw/data/xml_axx/*
+

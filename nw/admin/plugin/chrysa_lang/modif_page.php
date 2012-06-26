@@ -26,7 +26,7 @@ if(isset($_POST['modif_page'])){
 		}
 	}
 	if(file_put_contents($path.'data/locale/'.$_GET['lang'].'/LC_MESSAGES/'.$_GET['page'].'.po', $str_po)){
-		header('location: '.$base_url.'admin.php?page_admin=1&module=chrysa_lang&action=gestion_lang&lang='.$_GET['lang']);
+		header('location: '.$base_url.'admin.php?page_admin=1&module='.$_GET['module'].'&action=gestion_lang&lang='.$_GET['lang']);
 	}	
 //test de la demande d'ajout de nouveau code
 }elseif(isset($_POST['ajouter_code'])){
@@ -42,11 +42,11 @@ if(isset($_POST['modif_page'])){
 			}
 		}
 		if(file_put_contents($path.'data/locale/'.$_GET['lang'].'/LC_MESSAGES/'.$_GET['page'].'.po', $str_po)){
-			header('location: '.$base_url.'admin.php?page_admin=1&module=chrysa_lang&action=gestion_lang&lang='.$_GET['lang']);
+			header('location: '.$base_url.'admin.php?page_admin=1&module='.$_GET['module'].'&action=gestion_lang&lang='.$_GET['lang']);
 		}	
 	}
 ?>
-	<form method="post" action="<?php echo $base_url ?>admin.php?page_admin=1&module=chrysa_lang&lang=<?php echo $_GET['lang'] ?>&action=modif_page&page=<?php echo $_GET['page'] ?>">
+	<form method="post" action="<?php echo $base_url ?>admin.php?page_admin=1&module=<?php echo $_GET['module'] ?>&lang=<?php echo $_GET['lang'] ?>&action=modif_page&page=<?php echo $_GET['page'] ?>">
 		<table width="100%">
 			<caption>page : <?php echo $_GET['page'];?></caption>
 			<tbody>
@@ -77,7 +77,7 @@ if(isset($_POST['modif_page'])){
 	//test du contenu pour savoir si il faut afficher le formulaire de modification ou pas
 	if(count($msgid[1])>0){
 ?>
-		<form method="post" action="<?php echo $base_url ?>admin.php?page_admin=1&module=chrysa_lang&lang=<?php echo $_GET['lang'] ?>&action=modif_page&page=<?php echo $_GET['page'] ?>">
+		<form method="post" action="<?php echo $base_url ?>admin.php?page_admin=1&module=<?php echo $_GET['module'] ?>&lang=<?php echo $_GET['lang'] ?>&action=modif_page&page=<?php echo $_GET['page'] ?>">
 			<label for="nombre">nombre de traduction a ajouter :</label>
 			<select name="nombre">
 			<?php		
@@ -95,7 +95,7 @@ if(isset($_POST['modif_page'])){
 			<input type="submit" name="ajouter_code" value="ajouter"/>
 		</form>
 
-		<form method="post" action="<?php echo $base_url ?>admin.php?page_admin=1&module=chrysa_lang&lang=<?php echo $_GET['lang'] ?>&action=modif_page&page=<?php echo $_GET['page'] ?>">
+		<form method="post" action="<?php echo $base_url ?>admin.php?page_admin=1&module=<?php echo $_GET['module'] ?>&lang=<?php echo $_GET['lang'] ?>&action=modif_page&page=<?php echo $_GET['page'] ?>">
 			<table width="100%">
 				<caption>page : <?php echo $_GET['page']; ?></caption>
 				<tbody>

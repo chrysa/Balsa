@@ -109,7 +109,11 @@
 			}
 		}
 
-		function bdd_create($bdd_name, $bdd_use, $bdd_cre) {
+		function bdd_create($bdd_name, $bdd_use, $bdd_cre, $bdd_del) {
+   if ($bdd_del == '1') {
+     global $bdd, $path, $path_w;
+     $bdd->query2('DROP DATABASE `'.$bdd_name.'`');	
+   }
 			if ($bdd_use == 'oui') {
 				global $bdd, $path, $path_w;
 					if ($bdd_cre == '1') {
@@ -127,23 +131,23 @@
 					$erreur.='<div>creation du fichier php de la base de donnée</div>';
 					echo $erreur;
 					return false;
-				}
+				}				
 		}
 
-		function create_admin($login, $mail, $pass, $pass2) {
-			global $bdd, $path, $path_w;
+		function create_admin($login, $mail, $pass, $pass2, $db) {
+			global $bdd, $path;
 
 			if (is_file($path . 'admin/admin.xml')) {
 				unlink($path . 'admin/admin.xml');
 			}
 
-			$id = 1;
+			$id = $bdd->get_primkey();
 			if ($pass == $pass2) {
 				$pass = hash('sha512', $pass);
 			}
 			
-			if($db_==='oui'){
-				if($bdd->query2("INSERT INTO admin (`id`, `login`,`mail` ,`pass`) VALUES ('".$bdd->get_primkey()."', '".$login."', '".$mail."', '".$pass."')")){
+			if($db=='oui'){
+				if($bdd->query2("INSERT INTO admin (`id`, `login`,`mail` ,`pass`) VALUES ('".$id."', '".$login."', '".$mail."', '".$pass."')")){
 					$admin_db=true;
 				}else{
 					$admin_db=false;
@@ -254,6 +258,8 @@ function autoload($classname)
 		require_once $path.\'fonction/\'.$classname.\'.class.php\';
 	}elseif(is_file($path.\'fonction/\'.$classname.\'.interface.php\')){
 		require_once $path.\'fonction/\'.$classname.\'.interface.php\';
+	}elseif(is_file($path.\'fonction/\'.$classname.\'.helper.php\')){
+		require_once $path.\'fonction/\'.$classname.\'.helper.php\';
 	}
 }    
 spl_autoload_register (\'autoload\');
@@ -286,7 +292,7 @@ if($bdd->connect()!==true)
 		}
 
 		function create_js() {
-			global $path, $base_url;
+			global $path, $base_url;		
 			if (is_file($path.'media/js/balsa_comp_js.php')) {
 				unlink($path.'media/js/balsa_comp_js.php');
 			}
@@ -329,29 +335,30 @@ if($bdd->connect()!==true)
 
 		function suppr_install() {
 			global $path;
-			//return rmdir_r_2($path.'/install');
-			return true;
-			//je le laisee en cas de reinstalation, vu que install.php est plus la ca craint rien niveau secu :)
+			if(is_file($path.'admin/plugin/chrysa_reinstall/installed')){
+				unlink($path.'admin/plugin/chrysa_reinstall/installed');
+			}
+			return rmdir_r_2($path.'/install');
 		}
 
 		function install_composant() {
 			global $path, $path_w;
 			echo 'Deplacement du dossier nw';
 			if (move_nw($path, $path_w, $_POST['admin_path'])) {
-									echo ' ---> ok <br/>creation du fichier init';
-									if (creat_init_php($_POST['db_user'], $_POST['db_host'], $_POST['db_pass'],$_POST['db_name'])) {
-				if ($_POST['db_cre'] == '1') {
-					echo ' ---> ok<br/>creation de la base de donnée';
-				}
-				if (bdd_create($_POST['db_name'], $_POST['db_'], $_POST['db_cre'])) {
-					echo ' ---> ok <br/>creation du fichier admin';
-					if (create_admin($_POST['admin_login'], $_POST['admin_mail'], $_POST['admin_pass'], $_POST['admin_pass_c'])) {
-						echo ' ---> ok <br/>creation du fichier mail';
-						if (create_mail($_POST['adresse_serveur'], $_POST['port_serveur'], $_POST['utilisateur'], $_POST['mdp_mail'])) {
-							echo ' ---> ok <br/>creation du fichier index';
-							if (create_index()) {
-								echo ' ---> ok <br/>creation du fichier goulot';
-								if (create_goulot()) {
+				echo ' ---> ok <br/>creation du fichier init';
+				if (creat_init_php($_POST['db_user'], $_POST['db_host'], $_POST['db_pass'],$_POST['db_name'])) {
+					if ($_POST['db_cre'] == '1') {
+						echo ' ---> ok<br/>creation de la base de donnée';
+					}
+					if (bdd_create($_POST['db_name'], $_POST['db_'], $_POST['db_cre'], $_POST['db_del'])) {
+						echo ' ---> ok <br/>creation du fichier admin';
+						if (create_admin($_POST['admin_login'], $_POST['admin_mail'], $_POST['admin_pass'], $_POST['admin_pass_c'], $_POST['db_'])) {
+							echo ' ---> ok <br/>creation du fichier mail';
+							if (create_mail($_POST['adresse_serveur'], $_POST['port_serveur'], $_POST['utilisateur'], $_POST['mdp_mail'])) {
+								echo ' ---> ok <br/>creation du fichier index';
+								if (create_index()) {
+									echo ' ---> ok <br/>creation du fichier goulot';
+									if (create_goulot()) {
 										echo' ---> ok <br/>creation du fichier js';
 										if (create_js()) {
 											echo' ---> ok <br/>suppression du dossier install';
@@ -366,7 +373,7 @@ if($bdd->connect()!==true)
 						}
 					}
 				}
-			} else {
+			}else{
 				return false;
 			}
 		}
@@ -420,33 +427,36 @@ if($bdd->connect()!==true)
 						</div>
 						<div class="configStep">
 							<h3>Configuration de la base de donnée admin</h3>
-
-							<h4>Utiliser une base de donnée</h4>
-							<label for="db_1">Oui :</label>
-							<input type="radio" id="db_1" name="db_" value="oui" onclick="displayDbInfos(true);" /><br />
-							<label for="db_2">Non :</label>
-							<input type="radio" id="db_2" name="db_" value="non" checked="checked" onclick="displayDbInfos(false);" /><br />
-
-							<div class="no_db_infos" id="db_infos">
-								<label for="db_host">Hote de la base de donnée </label>
-								<input type="text" value="localhost" id="db_host" name="db_host" />
-
-								<label for="db_user">Utilisateur de la base de donnée </label>
-								<input type="text" value="root" id="db_user" name="db_user" />
-
-								<label for="db_pass">Password de la base de donnée </label>
-								<input type="password" id="db_pass" name="db_pass" />
-
-								<label for="db_name">Nom de la base de donnée </label>
-								<input type="text" value="Balsa" id="db_name" name="db_name" />
+							<div>
+								<h4>Faut-il supprimer la base de donnée (si elle existe déja) ?</h4>
+								<label for="db_del2">Oui :</label>
+								<input type="radio" value="1" id="db_del2" name="db_del" /><br/>
+								<label for="db_del1">Non :</label>
+								<input type="radio" value="0" id="db_del1" name="db_del" checked="checked" />
 							</div>
-
+							<div>
+							 <h4>Utiliser une base de donnée</h4>
+							 <label for="db_1">Oui :</label>
+							 <input type="radio" id="db_1" name="db_" value="oui" onclick="displayDbInfos(true);" /><br />
+							 <label for="db_2">Non :</label>
+							 <input type="radio" id="db_2" name="db_" value="non" checked="checked" onclick="displayDbInfos(false);" />
+							</div>
 							<div>
 								<h4>Faut-il créer la base de donnée ? </h4>
 								<label for="db_cre2">Oui :</label>
 								<input type="radio" value="1" id="db_cre2" name="db_cre" /><br/>
 								<label for="db_cre1">Non :</label>
 								<input type="radio" value="0" id="db_cre1" name="db_cre" checked="checked" />
+							</div>
+							<div class="no_db_infos" id="db_infos">
+								<label for="db_host">Hote de la base de donnée </label>
+								<input type="text" value="localhost" id="db_host" name="db_host" />
+								<label for="db_user">Utilisateur de la base de donnée </label>
+								<input type="text" value="root" id="db_user" name="db_user" />
+								<label for="db_pass">Password de la base de donnée </label>
+								<input type="password" id="db_pass" name="db_pass" />
+								<label for="db_name">Nom de la base de donnée </label>
+								<input type="text" value="Balsa" id="db_name" name="db_name" />
 							</div>
 						</div>
 						<div class="configStep">
@@ -566,7 +576,6 @@ if($bdd->connect()!==true)
 		if (install_composant()) {
 			echo' ---> ok<br/><a href="' . $base_url . 'admin.php">entrez dans la page d\'administration</a>';
 		}
-
 		break;
 }
 ?>
@@ -574,3 +583,4 @@ if($bdd->connect()!==true)
 				<div style="clear:both"></div>
 			</body>
 		</html>
+

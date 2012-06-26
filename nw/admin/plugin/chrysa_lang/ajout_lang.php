@@ -28,16 +28,16 @@ if(isset($_POST['ajouter'])){
 			copy($path.'data/locale/'.$array_lang_exist[2].'/LC_MESSAGES/'.$p, $path.'data/locale/'.$_POST['lang'].'/LC_MESSAGES/'.$p );
 		}
 	}
-	header('location: '.$base_url.'admin.php?page_admin=1&module=chrysa_lang&action=gestion_lang');
+	header('location: '.$base_url.'admin.php?page_admin=1&module='.$_GET['module'].'&action=gestion_lang');
 }
 //liste des langues disponibles
 ?>
-<form method="post" action="<?php echo $base_url ?>admin.php?page_admin=1&module=chrysa_lang&action=ajout_lang">
+<form method="post" action="<?php echo $base_url ?>admin.php?page_admin=1&module=<?php echo $_GET['module'] ?>&action=ajout_lang">
 	<table width="100%">
 		<caption>Sélectionner une langue a ajouter</caption>
 		<tbody>
 		<?php
-		inc($path.'admin/plugin/chrysa_lang/array_lang.php');
+		inc($path.'admin/plugin/'.$_GET['module'].'/array_lang.php');
 		$compt=1;
 		foreach ($array_lang as $k => $v){
 			if(!in_array($k,$array_lang_exist)){
